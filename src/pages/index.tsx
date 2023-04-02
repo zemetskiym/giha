@@ -14,7 +14,7 @@ export default function Index() {
   // Set up state variables using the useState hook
   const [search, setSearch] = useState<Search>({user: "", submit: false})
   const [userData, setUserData] = useState<object | null>(null)
-  const [repoData, setRepoData] = useState<object | null>(null)
+  const [repoData, setRepoData] = useState<Array<object> | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Define an asynchronous function to fetch user and repository data from the GitHub API
@@ -39,7 +39,7 @@ export default function Index() {
 
     // Fetch repository data
     let repoResponse: Response = await fetch(`https://api.github.com/users/${search.user}/repos`)
-    let repoData: object = await repoResponse.json()
+    let repoData: Array<object> = await repoResponse.json()
 
     // Handle different HTTP status codes
     if (repoResponse.status >= 200 && repoResponse.status < 300) {
