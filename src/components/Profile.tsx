@@ -1,6 +1,8 @@
+// Importing styles and Image component from Next.js
 import styles from "@/styles/components/Profile.module.css"
 import Image from "next/image"
 
+// Defining the User and Repo interfaces
 interface User {
     name: string | null,
     login: string,
@@ -14,15 +16,18 @@ interface Repo {
     stargazers_count: number
 }
 
+// Defining the Props interface, which takes in partial User and Repo data
 interface Props {
     userData: Partial<User>
     repoData: Array<Partial<Repo>>
 }
 
+// Defining the Profile component, which takes in Props and returns a JSX element
 export default function Profile (props: Props): JSX.Element {
     const {userData, repoData} = props
     const {name, login, avatar_url, public_repos, followers, following} = userData
     
+    // Defining a function to calculate the total number of stars for all repos
     function stars() {
         let stars = 0
         repoData.forEach(repo => {
@@ -31,9 +36,11 @@ export default function Profile (props: Props): JSX.Element {
         return stars
     }
 
+    // Logging the user and repo data for debugging purposes
     console.log(userData)
     console.log(repoData)
 
+    // Returning the JSX element, which displays user and repo data
     return (
         <header>
             <h1>Profile</h1>
