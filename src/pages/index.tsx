@@ -57,6 +57,24 @@ export default function Index() {
     else {
       setError(`Unknown error code: ${repoResponse.status}.`)
     }
+
+    // Fetch event data
+    let eventResponse: Response = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`)
+    let eventData: Array<object> = await eventResponse.json()
+
+    // Handle different HTTP status codes
+    if (eventResponse.status >= 200 && eventResponse.status < 300) {
+      setEventData(eventData)
+    }
+    else if (eventResponse.status == 404) {
+      setError("Please enter a valid username.")
+    }
+    else if (eventResponse.status == 403) {
+      setError("Please wait for the API rate limit to reset.")
+    }
+    else {
+      setError(`Unknown error code: ${eventResponse.status}.`)
+    }
   }
 
   // Use the useEffect hook to remove error messages after 5000 milliseconds of being set
