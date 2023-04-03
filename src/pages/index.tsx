@@ -38,7 +38,7 @@ export default function Index() {
     }
 
     // Fetch repository data
-    let repoResponse: Response = await fetch(`https://api.github.com/users/${search.user}/repos`)
+    let repoResponse: Response = await fetch(`https://api.github.com/users/${search.user}/repos?per_page=100`)
     let repoData: Array<object> = await repoResponse.json()
 
     // Handle different HTTP status codes
