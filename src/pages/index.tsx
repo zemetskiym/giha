@@ -56,6 +56,16 @@ export default function Index() {
     }
   }
 
+  // Use the useEffect hook to remove error messages after 5000 milliseconds of being set
+  useEffect(() => {
+    if (error != null) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000); 
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   // Use the useEffect hook to call fetchData() when the search.submit variable changes
   useEffect(() => {
     if(search.submit == true) fetchData()
@@ -67,6 +77,8 @@ export default function Index() {
       {userData == null && <Home search={search} setSearch={setSearch} />}
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
+
+      {error != null && <p>{error}</p>}
     </>
   )
 }
