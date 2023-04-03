@@ -3,6 +3,7 @@ import styles from '@/styles/Index.module.css'
 import { useState, useEffect } from 'react'
 import Home from "../components/Home"
 import Profile from "../components/Profile"
+import Languages from '@/components/Languages'
 
 export default function Index() {
   // Define the structure of the search state
@@ -15,6 +16,8 @@ export default function Index() {
   const [search, setSearch] = useState<Search>({user: "", submit: false})
   const [userData, setUserData] = useState<object | null>(null)
   const [repoData, setRepoData] = useState<Array<object> | null>(null)
+  const [numCommits, setNumCommits] = useState<number>(1)
+  const [eventData, setEventData] = useState<Array<object> | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Define an asynchronous function to fetch user and repository data from the GitHub API
@@ -74,9 +77,11 @@ export default function Index() {
   // Render either the Home or Profile component based on whether userData and repoData are null or not
   return (
     <>
-      {userData == null && <Home search={search} setSearch={setSearch} />}
+      {userData == null && <Home search={search} setSearch={setSearch} numCommits={numCommits} setNumCommits={setNumCommits} />}
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
+      
+      {eventData != null && <Languages />}
 
       {error != null && <p>{error}</p>}
     </>

@@ -10,13 +10,15 @@ interface Search {
 
 // Defining the Props interface, which takes in Search and setSearch functions
 interface Props {
-    search: Search;
-    setSearch: React.Dispatch<React.SetStateAction<Search>>;
+    search: Search,
+    setSearch: React.Dispatch<React.SetStateAction<Search>>,
+    numCommits: number,
+    setNumCommits: React.Dispatch<React.SetStateAction<number>>
 }
 
 // Defining the Home component, which takes in Props and returns a JSX element
 export default function Home (props: Props): JSX.Element {
-    const { search, setSearch } = props;
+    const { search, setSearch, numCommits, setNumCommits } = props;
 
     // Defining a function to handle form submissions
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -33,6 +35,11 @@ export default function Home (props: Props): JSX.Element {
                 value={search.user}
                 placeholder="Search for user..."
             />
+            <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
+                <option value={1}>1 Commit</option>
+                <option value={10}>10 Commits</option>
+                <option value={15}>15 Commits</option>
+            </select>
             <button>Submit</button>
         </form>
     )
