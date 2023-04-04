@@ -12,15 +12,53 @@ export default function Index() {
     submit: boolean
   }
 
+  interface Event {
+    actor: {
+      login: string
+    },
+    repo: {
+      name: string
+    },
+    payload: {
+      commits: [
+        {
+          sha: string
+        }
+      ]
+    }
+  }
+
   // Set up state variables using the useState hook
   const [search, setSearch] = useState<Search>({user: "", submit: false})
   const [userData, setUserData] = useState<object | null>(null)
   const [repoData, setRepoData] = useState<Array<object> | null>(null)
   const [numCommits, setNumCommits] = useState<number>(1)
-  const [eventData, setEventData] = useState<Array<object> | null>(null)
+  const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null)
+  const [commitData, setCommitData] = useState<Array<object>>([])
   const [error, setError] = useState<string | null>(null)
 
-  // Define an asynchronous function to fetch user and repository data from the GitHub API
+  // Define an asynchronous function to fetch commit data from the Github API
+  async function fetchCommit(owner: string, repo: string, sha: string) {
+    let commitResponse: Response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`)
+    let commitData: object = await commitResponse.json()
+
+    // Handle different HTTP status codes
+    if (commitResponse.status >= 200 && commitResponse.status < 300) {
+      setCommitData(prev => [...prev, commitData])
+    }
+    else if (commitResponse.status == 404) {
+      setError("Please enter a valid username.")
+    }
+    else if (commitResponse.status == 403) {
+      setError("Please wait for the API rate limit to reset.")
+    }
+    else {
+      setError(`Unknown error code: ${commitResponse.status}.`)
+    }
+    console.log(commitData)
+  }
+
+  // Define an asynchronous function to fetch user, repository, and event data from the GitHub API
   async function fetchData() {
     // Fetch user data
     let userResponse: Response = await fetch(`https://api.github.com/users/${search.user}`)
@@ -75,6 +113,13 @@ export default function Index() {
     else {
       setError(`Unknown error code: ${eventResponse.status}.`)
     }
+
+    if (eventData != null) {
+      eventData.forEach((event: Partial<Event>) => {
+        // Call async fetchCommit function because async operations are not allowed in forEach loops
+        fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+      })
+    }
   }
 
   // Use the useEffect hook to remove error messages after 5000 milliseconds of being set
@@ -99,7 +144,7 @@ export default function Index() {
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
-      {eventData != null && <Languages />}
+      {commitData != null && <Languages commitData={commitData} />}
 
       {error != null && <p>{error}</p>}
     </>

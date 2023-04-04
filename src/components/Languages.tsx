@@ -1,7 +1,7 @@
 import styles from "@/styles/components.Languages.module.css"
 
 interface Props {
-    
+    commitData: Array<object>
 }
 
 export default function Languages(props: Props): JSX.Element {
