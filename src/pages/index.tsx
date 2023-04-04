@@ -144,7 +144,7 @@ export default function Index() {
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
-      {commitData != null && <Languages commitData={commitData} />}
+      {commitData.length > 0 && <Languages commitData={commitData} />}
 
       {error != null && <p>{error}</p>}
     </>
