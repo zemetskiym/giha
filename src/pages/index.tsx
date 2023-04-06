@@ -12,6 +12,7 @@ export default function Index() {
     submit: boolean
   }
 
+  // Define types/interfaces
   interface Event {
     actor: {
       login: string
@@ -27,6 +28,13 @@ export default function Index() {
       ]
     }
   }
+  interface File {
+    patch: string;
+    filename: string
+  }
+  interface Commit {
+    files: Array<File>;
+  }
 
   // Set up state variables using the useState hook
   const [search, setSearch] = useState<Search>({user: "", submit: false})
@@ -34,13 +42,13 @@ export default function Index() {
   const [repoData, setRepoData] = useState<Array<object> | null>(null)
   const [numCommits, setNumCommits] = useState<number>(1)
   const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null)
-  const [commitData, setCommitData] = useState<Array<object>>([])
+  const [commitData, setCommitData] = useState<Array<Commit>>([])
   const [error, setError] = useState<string | null>(null)
 
   // Define an asynchronous function to fetch commit data from the Github API
   async function fetchCommit(owner: string, repo: string, sha: string) {
     let commitResponse: Response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`)
-    let commitData: object = await commitResponse.json()
+    let commitData: Commit = await commitResponse.json()
 
     // Handle different HTTP status codes
     if (commitResponse.status >= 200 && commitResponse.status < 300) {
@@ -117,7 +125,7 @@ export default function Index() {
     if (eventData != null) {
       eventData.forEach((event: Partial<Event>) => {
         // Call async fetchCommit function because async operations are not allowed in forEach loops
-        fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+        if (event.payload!.commits != undefined) fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
       })
     }
   }
