@@ -63,7 +63,6 @@ export default function Index() {
     else {
       setError(`Unknown error code: ${commitResponse.status}.`)
     }
-    console.log(commitData)
   }
 
   // Define an asynchronous function to fetch user, repository, and event data from the GitHub API

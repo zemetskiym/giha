@@ -36,10 +36,6 @@ export default function Profile (props: Props): JSX.Element {
         return stars
     }
 
-    // Logging the user and repo data for debugging purposes
-    console.log(userData)
-    console.log(repoData)
-
     // Returning the JSX element, which displays user and repo data
     return (
         <header>
