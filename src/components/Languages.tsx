@@ -1,6 +1,7 @@
 // Import necessary modules
 import styles from "@/styles/components.Languages.module.css"
 import hljs from 'highlight.js'
+import { languageColors } from "../../public/languageColors";
 
 // Define types/interfaces
 interface File {
@@ -57,22 +58,40 @@ export default function Languages(props: Props): JSX.Element {
 
     // Loop through each commit in commitData and extract the language of the first file
     commitData.forEach((commit: Commit) => {
-        let cleanedDiff = cleanUpDiff(commit.files![0].patch) // Clean up the diff string
-        const fileExtension = getFileExtension(commit.files![0].filename) // Get the file extension
-        const language = hljs.highlightAuto(cleanedDiff, [fileExtension]).language // Highlight the code and get the detected language
+        // Clean up the diff string of the first file in the commit
+        let cleanedDiff = cleanUpDiff(commit.files![0].patch)
 
-        // If the language is not undefined, push an object with the language name to the results array
-        if (language !== undefined) {
-            const languageObject = hljs.getLanguage(language)
-        
-            if (languageObject != undefined) results.push({language: languageObject.name})
+        // Get the file extension of the first file in the commit
+        const firstFileExtension = getFileExtension(commit.files![0].filename)
+
+        // Use highlight.js to auto-detect the language of the cleaned up diff, based on the first file's extension
+        const detectedLanguage = hljs.highlightAuto(cleanedDiff, [firstFileExtension]).language
+
+        // If the detected language is not undefined, add an object with the language name and color to the results array
+        if (detectedLanguage !== undefined) {
+            // Get more information about the detected language from highlight.js
+            const detectedLanguageInfo = hljs.getLanguage(detectedLanguage)
+
+            // If we have information about the detected language and its name, add it to the results array
+            if (detectedLanguageInfo != undefined && detectedLanguageInfo.name != undefined) {
+                // If we have a color for the detected language, add the name and color to the results array
+                if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`)) {
+                    const languageName = detectedLanguageInfo.name
+                    const languageColor = languageColors[languageName]
+                    results.push({language: languageName, color: languageColor})
+                }
+            }
         }
     })
+
     
     // Return the component JSX
     return (
         <>
             <h1>Languages</h1>
+            {results.map((commit: any, index: number) => (
+                <small key={index}>{commit.language}: {commit.color}</small>
+            ))}
         </>
     )
 }
