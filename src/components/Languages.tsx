@@ -9,6 +9,11 @@ interface File {
     filename: string
 }
 interface Commit {
+    commit: {
+        author: {
+            date: string
+        }
+    }
     files: Array<File>;
 }
 interface Props {
@@ -74,11 +79,11 @@ export default function Languages(props: Props): JSX.Element {
 
             // If we have information about the detected language and its name, add it to the results array
             if (detectedLanguageInfo != undefined && detectedLanguageInfo.name != undefined) {
-                // If we have a color for the detected language, add the name and color to the results array
-                if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`)) {
+                // If we have a color and date for the detected language, add the name, color, and date to the results array
+                if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`) && commit.commit.author.date != undefined) {
                     const languageName = detectedLanguageInfo.name
                     const languageColor = languageColors[languageName]
-                    results.push({language: languageName, color: languageColor})
+                    results.push({language: languageName, color: languageColor, date: commit.commit.author.date.split("T")[0]})
                 }
             }
         }
@@ -90,7 +95,7 @@ export default function Languages(props: Props): JSX.Element {
         <>
             <h1>Languages</h1>
             {results.map((commit: any, index: number) => (
-                <small key={index}>{commit.language}: {commit.color}</small>
+                <small key={index}>{commit.language}: {commit.color}, {commit.date}</small>
             ))}
         </>
     )

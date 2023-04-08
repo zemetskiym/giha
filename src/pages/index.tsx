@@ -33,6 +33,11 @@ export default function Index() {
     filename: string
   }
   interface Commit {
+    commit: {
+      author: {
+          date: string
+      }
+    }
     files: Array<File>;
   }
 
