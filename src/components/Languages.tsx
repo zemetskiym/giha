@@ -1,7 +1,9 @@
 // Import necessary modules
 import styles from "@/styles/components.Languages.module.css"
+import { useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js'
 import { languageColors } from "../../public/languageColors";
+import * as d3 from "d3";
 
 // Define types/interfaces
 interface File {
@@ -17,17 +19,18 @@ interface Commit {
     files: Array<File>;
 }
 interface Props {
-    commitData: Array<Commit>;
+    commitData: Array<Commit | null>;
 }
 
 // Define the functional component Languages and pass in Props
 export default function Languages(props: Props): JSX.Element {
 
     // Destructure the props object
-    const {commitData} = props
+    const {commitData = []} = props
+    const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
 
     // Declare an empty array to store results
-    let results: Array<object> = []
+    const [results, setResults] = useState<Array<any>>([])
 
     // Define a helper function cleanUpDiff to remove unnecessary characters from a string
     function cleanUpDiff(diff: string) {
@@ -58,11 +61,10 @@ export default function Languages(props: Props): JSX.Element {
 
     // Define a helper function getFileExtension to get the file extension of a given filename
     function getFileExtension(filename: string): string {
-        return filename.split('.').pop() || '';
+        return filename.split('.').pop() || ''
     }
 
-    // Loop through each commit in commitData and extract the language of the first file
-    commitData.forEach((commit: Commit) => {
+    function findCommitStats(commit: Commit) {
         // Clean up the diff string of the first file in the commit
         let cleanedDiff = cleanUpDiff(commit.files![0].patch)
 
@@ -83,20 +85,63 @@ export default function Languages(props: Props): JSX.Element {
                 if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`) && commit.commit.author.date != undefined) {
                     const languageName = detectedLanguageInfo.name
                     const languageColor = languageColors[languageName]
-                    results.push({language: languageName, color: languageColor, date: commit.commit.author.date.split("T")[0]})
+                    setResults([...results, {language: languageName, color: languageColor, date: new Date(commit.commit.author.date.split("T")[0])}])
+                    return
                 }
             }
         }
-    })
 
+        // If any of the conditions are not met, append a null value to the results array
+        setResults([...results, null])
+    }
+
+    useEffect(() => {
+        // Loop through each commit in commitData and extract the language of the first file
+        for(let i = 0; i < filteredCommitData.length; i++) {
+            findCommitStats(filteredCommitData[i])
+        }
+    }, [])
+
+    function cumulativeStackedAreaChart () {
+        const svgRef = useRef<SVGSVGElement>(null)
+
+        useEffect(() => {
+            console.log(filteredCommitData)
+            console.log(results)
+            if (svgRef.current && results.length == filteredCommitData.length) {
+                const resultsWithoutNull = results.filter((item) => item !== null)
+                const svg = d3.select(svgRef.current)
+
+                const height = 600
+                const width = 1200
+                const margin = {top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width}
+
+                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date)
+                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: { language: string, color: string, date: Date }) => d.date > max ? d.date : max, resultsWithoutNull[0].date)
+
+                const x = d3.scaleTime()
+                    .domain([earliestDate, latestDate])
+                    .range([margin.left, width - margin.right])
+
+                const y = d3.scaleLinear()
+                    .domain([0, resultsWithoutNull.length])
+                    .range([margin.bottom, height - margin.top])
+
+                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
+                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
+            }
+        }, [results, svgRef])
+        
+        return <svg ref={svgRef} width="1200" height="600" />
+    }
     
     // Return the component JSX
     return (
         <>
             <h1>Languages</h1>
-            {results.map((commit: any, index: number) => (
-                <small key={index}>{commit.language}: {commit.color}, {commit.date}</small>
-            ))}
+            <>
+                {cumulativeStackedAreaChart()}
+            </>
         </>
     )
 }

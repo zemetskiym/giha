@@ -47,7 +47,7 @@ export default function Index() {
   const [repoData, setRepoData] = useState<Array<object> | null>(null)
   const [numCommits, setNumCommits] = useState<number>(1)
   const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null)
-  const [commitData, setCommitData] = useState<Array<Commit>>([])
+  const [commitData, setCommitData] = useState<Array<Commit | null>>([])
   const [error, setError] = useState<string | null>(null)
 
   // Define an asynchronous function to fetch commit data from the Github API
@@ -129,7 +129,11 @@ export default function Index() {
     if (eventData != null) {
       eventData.forEach((event: Partial<Event>) => {
         // Call async fetchCommit function because async operations are not allowed in forEach loops
-        if (event.payload!.commits != undefined) fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+        if (event.payload!.commits != undefined) {
+          fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+        } else {
+          setCommitData(prev => [...prev, null])
+        }
       })
     }
   }
@@ -156,7 +160,7 @@ export default function Index() {
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
-      {commitData.length > 0 && <Languages commitData={commitData} />}
+      {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} />}
 
       {error != null && <p>{error}</p>}
     </>
