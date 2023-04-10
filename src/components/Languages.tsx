@@ -85,20 +85,20 @@ export default function Languages(props: Props): JSX.Element {
                 if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`) && commit.commit.author.date != undefined) {
                     const languageName = detectedLanguageInfo.name
                     const languageColor = languageColors[languageName]
-                    setResults([...results, {language: languageName, color: languageColor, date: new Date(commit.commit.author.date.split("T")[0])}])
+                    setResults(prevResults => [...prevResults, {language: languageName, color: languageColor, date: new Date(commit.commit.author.date.split("T")[0])}])
                     return
                 }
             }
         }
 
         // If any of the conditions are not met, append a null value to the results array
-        setResults([...results, null])
+        setResults(prevResults => [...prevResults, null])
     }
 
     useEffect(() => {
         // Loop through each commit in commitData and extract the language of the first file
-        for(let i = 0; i < filteredCommitData.length; i++) {
-            findCommitStats(filteredCommitData[i])
+        for(let i = 0; i < commitData.length; i++) {
+            if (commitData[i] != null) findCommitStats(commitData[i] as Commit)
         }
     }, [])
 
