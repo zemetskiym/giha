@@ -124,7 +124,7 @@ export default function Languages(props: Props): JSX.Element {
                     .range([margin.left, width - margin.right])
 
                 const y = d3.scaleLinear()
-                    .domain([0, resultsWithoutNull.length])
+                    .domain([resultsWithoutNull.length, 0])
                     .range([margin.bottom, height - margin.top])
 
                 svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
