@@ -106,8 +106,6 @@ export default function Languages(props: Props): JSX.Element {
         const svgRef = useRef<SVGSVGElement>(null)
 
         useEffect(() => {
-            console.log(filteredCommitData)
-            console.log(results)
             if (svgRef.current && results.length == filteredCommitData.length) {
                 const resultsWithoutNull = results.filter((item) => item !== null)
                 const svg = d3.select(svgRef.current)
@@ -126,6 +124,11 @@ export default function Languages(props: Props): JSX.Element {
                 const y = d3.scaleLinear()
                     .domain([resultsWithoutNull.length, 0])
                     .range([margin.bottom, height - margin.top])
+
+                const stack = d3.stack()
+                    .keys(["language"])
+
+                const stackedData = stack(resultsWithoutNull)
 
                 svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
