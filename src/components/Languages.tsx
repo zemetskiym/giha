@@ -127,6 +127,7 @@ export default function Languages(props: Props): JSX.Element {
 
                 const stack = d3.stack()
                     .keys(["language"])
+                    .value(() => 1)
 
                 const stackedData = stack(resultsWithoutNull)
 
