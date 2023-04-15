@@ -102,41 +102,72 @@ export default function Languages(props: Props): JSX.Element {
         }
     }, [])
 
-    function cumulativeStackedAreaChart () {
-        const svgRef = useRef<SVGSVGElement>(null)
+    // Define a function that creates a cumulative stacked area chart using D3.js.
+    function cumulativeStackedAreaChart() {
+        // Create a reference to the SVG element that will be rendered.
+        const svgRef = useRef<SVGSVGElement>(null);
 
+        // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
+            // Check if the SVG element and the required data are available.
             if (svgRef.current && results.length == filteredCommitData.length) {
-                const resultsWithoutNull = results.filter((item) => item !== null)
-                const svg = d3.select(svgRef.current)
+                // Remove any null values from the results array.
+                const resultsWithoutNull = results.filter((item) => item !== null);
+                
+                // Select the SVG element using D3.js.
+                const svg = d3.select(svgRef.current);
 
-                const height = 600
-                const width = 1200
-                const margin = {top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width}
+                // Define the dimensions of the chart and its margins.
+                const height = 600;
+                const width = 1200;
+                const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
 
-                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date)
-                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: { language: string, color: string, date: Date }) => d.date > max ? d.date : max, resultsWithoutNull[0].date)
+                // Determine the earliest and latest dates in the results array.
+                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
+                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: { language: string, color: string, date: Date }) => d.date > max ? d.date : max, resultsWithoutNull[0].date);
 
+                // Create a scale for the x-axis.
                 const x = d3.scaleTime()
                     .domain([earliestDate, latestDate])
-                    .range([margin.left, width - margin.right])
+                    .range([margin.left, width - margin.right]);
 
+                // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
                     .domain([resultsWithoutNull.length, 0])
-                    .range([margin.bottom, height - margin.top])
+                    .range([margin.bottom, height - margin.top]);
 
+                // Create a stack generator using D3.js.
                 const stack = d3.stack()
                     .keys(["language"])
-                    .value(() => 1)
+                    .value(() => 1);
 
-                const stackedData = stack(resultsWithoutNull)
+                // Use the stack generator to create a stacked data array.
+                const stackedData = stack(resultsWithoutNull);
 
-                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
-                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
+                // Create an area generator using D3.js.
+                const area = d3.area()
+                    .x((d: any) => x(d.data.date))
+                    .y0((d: any) => y(d[0]))
+                    .y1((d: any) => y(d[1]));
+
+                // Add the x-axis to the chart.
+                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x));
+
+                // Add the y-axis to the chart.
+                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y));
+
+                // Add the stacked areas to the chart.
+                svg.append("g")
+                    .selectAll("path")
+                    .data(stackedData)
+                    .join("path")
+                    .attr("fill", 'steelblue')
+                    .attr("d", area as any);
             }
-        }, [results, svgRef])
-        
-        return <svg ref={svgRef} width="1200" height="600" />
+        }, [results, svgRef]);
+
+        // Return the SVG element with the specified dimensions.
+        return <svg ref={svgRef} width="1200" height="600" />;
     }
     
     // Return the component JSX
