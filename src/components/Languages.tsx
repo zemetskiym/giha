@@ -110,7 +110,7 @@ export default function Languages(props: Props): JSX.Element {
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
             // Check if the SVG element and the required data are available.
-            if (svgRef.current && results.length == filteredCommitData.length) {
+            if (svgRef.current && results.length == filteredCommitData.length && results.filter((item) => item !== null).length > 0) {
                 // Remove any null values from the results array.
                 const resultsWithoutNull = results.filter((item) => item !== null);
                 
@@ -133,8 +133,8 @@ export default function Languages(props: Props): JSX.Element {
 
                 // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
-                    .domain([resultsWithoutNull.length, 0])
-                    .range([margin.bottom, height - margin.top]);
+                    .domain([0, resultsWithoutNull.length])
+                    .range([height - margin.top,  margin.bottom]);
 
                 // Create a stack generator using D3.js.
                 const stack = d3.stack()
