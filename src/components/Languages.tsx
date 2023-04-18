@@ -85,7 +85,7 @@ export default function Languages(props: Props): JSX.Element {
                 if (languageColors.hasOwnProperty(`${detectedLanguageInfo.name}`) && commit.commit.author.date != undefined) {
                     const languageName = detectedLanguageInfo.name
                     const languageColor = languageColors[languageName]
-                    setResults(prevResults => [...prevResults, {language: languageName, color: languageColor, date: new Date(commit.commit.author.date.split("T")[0])}])
+                    setResults(prevResults => [...prevResults, {language: languageName, color: languageColor, date: new Date(commit.commit.author.date)}])
                     return
                 }
             }
