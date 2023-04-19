@@ -140,13 +140,9 @@ export default function Languages(props: Props): JSX.Element {
                 const stack = d3.stack()
                     .keys(["language"])
                     .value((d) => {
-                        let sum = 1
-                        resultsWithoutNull.filter((commit) => commit.language == d.language).forEach((commit) => {
-                            if (commit.date < d.date) sum++
-                        })
-                        return sum
-                    });
-
+                        const commits = resultsWithoutNull.filter((commit) => commit.language === d.language && commit.date <= d.date)
+                        return commits.length
+                    })
                 // Use the stack generator to create a stacked data array.
                 const stackedData = stack(resultsWithoutNull);
 
