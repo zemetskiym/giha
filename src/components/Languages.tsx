@@ -112,7 +112,7 @@ export default function Languages(props: Props): JSX.Element {
             // Check if the SVG element and the required data are available.
             if (svgRef.current && results.length == filteredCommitData.length && results.filter((item) => item !== null).length > 0) {
                 // Remove any null values from the results array.
-                const resultsWithoutNull = results.filter((item) => item !== null);
+                const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
                 
                 // Select the SVG element using D3.js.
                 const svg = d3.select(svgRef.current);
