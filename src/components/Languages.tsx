@@ -140,7 +140,7 @@ export default function Languages(props: Props): JSX.Element {
                 const stack = d3.stack()
                     .keys(["language"])
                     .value((d) => {
-                        const commits = resultsWithoutNull.filter((commit) => commit.language === d.language && commit.date <= d.date)
+                        const commits = resultsWithoutNull.filter((commit) => commit.date <= d.date)
                         return commits.length
                     })
                 // Use the stack generator to create a stacked data array.
@@ -163,7 +163,7 @@ export default function Languages(props: Props): JSX.Element {
                     .selectAll("path")
                     .data(stackedData)
                     .join("path")
-                        .attr("fill", 'steelblue')
+                        .attr("fill", (d) => d[0].data.color)
                         .attr("d", area as any);
             }
         }, [results, svgRef]);
