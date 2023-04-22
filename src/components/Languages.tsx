@@ -103,14 +103,17 @@ export default function Languages(props: Props): JSX.Element {
     }, [])
 
     // Define a function that creates a cumulative stacked area chart using D3.js.
-    function cumulativeStackedAreaChart() {
+    function cumulativeStackedAreaChart(): JSX.Element {
+        // Check if the required data is available.
+        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 0
+
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
             // Check if the SVG element and the required data are available.
-            if (svgRef.current && results.length == filteredCommitData.length && results.filter((item) => item !== null).length > 0) {
+            if (hasData) {
                 // Remove any null values from the results array.
                 const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
                 
@@ -147,8 +150,7 @@ export default function Languages(props: Props): JSX.Element {
                         return commits.length
                     })                    
                 // Use the stack generator to create a stacked data array.
-                const stackedData = stack(resultsWithoutNull);
-                console.log(stackedData)
+                const stackedData = stack(resultsWithoutNull)
 
                 const colorMap = resultsWithoutNull.reduce((acc, curr) => {
                     if (!(curr.language in acc)) {
@@ -188,7 +190,9 @@ export default function Languages(props: Props): JSX.Element {
         }, [results, svgRef]);
 
         // Return the SVG element with the specified dimensions.
-        return <svg ref={svgRef} width="1200" height="600" />;
+        if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
+        if (!hasData) return <p>There is no data available to visualize the chart. Please try again later.</p>
+        return <p>There is no data available to visualize the chart. Please try again later.</p>
     }
     
     // Return the component JSX
