@@ -136,15 +136,23 @@ export default function Languages(props: Props): JSX.Element {
                     .domain([0, resultsWithoutNull.length])
                     .range([height - margin.top,  margin.bottom]);
 
+                const languageSet: Set<string> = new Set()
+                resultsWithoutNull.map((commit) => {languageSet.add(commit.language)})
+
                 // Create a stack generator using D3.js.
                 const stack = d3.stack()
-                    .keys(["language"])
-                    .value((d) => {
-                        const commits = resultsWithoutNull.filter((commit) => commit.date <= d.date)
+                    .keys(Array.from(languageSet))
+                    .value((d, key) => {
+                        const commits = resultsWithoutNull.filter((commit) => commit.language === key && commit.date <= d.date)
                         return commits.length
-                    })
+                    })                    
                 // Use the stack generator to create a stacked data array.
                 const stackedData = stack(resultsWithoutNull);
+                console.log(stackedData)
+
+                const colorScale: any = d3.scaleOrdinal()
+                    .domain(stackedData.map(d => d.key))
+                    .range(d3.schemePaired)
 
                 // Create an area generator using D3.js.
                 const area = d3.area()
@@ -163,7 +171,7 @@ export default function Languages(props: Props): JSX.Element {
                     .selectAll("path")
                     .data(stackedData)
                     .join("path")
-                        .attr("fill", (d) => d[0].data.color)
+                        .attr("fill", (d: any) => colorScale(d.key).toString())
                         .attr("d", area as any);
             }
         }, [results, svgRef]);
