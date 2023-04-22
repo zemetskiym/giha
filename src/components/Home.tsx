@@ -38,7 +38,7 @@ export default function Home (props: Props): JSX.Element {
             <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
                 <option value={1}>1 Commit</option>
                 <option value={10}>10 Commits</option>
-                <option value={15}>15 Commits</option>
+                <option value={20}>20 Commits</option>
             </select>
             <button>Submit</button>
         </form>

@@ -150,9 +150,16 @@ export default function Languages(props: Props): JSX.Element {
                 const stackedData = stack(resultsWithoutNull);
                 console.log(stackedData)
 
+                const colorMap = resultsWithoutNull.reduce((acc, curr) => {
+                    if (!(curr.language in acc)) {
+                      acc[curr.language] = curr.color;
+                    }
+                    return acc;
+                }, {});
+
                 const colorScale: any = d3.scaleOrdinal()
                     .domain(stackedData.map(d => d.key))
-                    .range(d3.schemePaired)
+                    .range(stackedData.map(d => colorMap[d.key]))
 
                 // Create an area generator using D3.js.
                 const area = d3.area()
