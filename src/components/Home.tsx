@@ -36,7 +36,7 @@ export default function Home (props: Props): JSX.Element {
                 placeholder="Search for user..."
             />
             <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
-                <option value={1}>1 Commit</option>
+                <option value={3}>3 Commits</option>
                 <option value={10}>10 Commits</option>
                 <option value={20}>20 Commits</option>
             </select>

@@ -105,7 +105,7 @@ export default function Languages(props: Props): JSX.Element {
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function cumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
-        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 0
+        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
 
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
@@ -191,8 +191,8 @@ export default function Languages(props: Props): JSX.Element {
 
         // Return the SVG element with the specified dimensions.
         if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
-        if (!hasData) return <p>There is no data available to visualize the chart. Please try again later.</p>
-        return <p>There is no data available to visualize the chart. Please try again later.</p>
+        if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
+        return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
     
     // Return the component JSX
