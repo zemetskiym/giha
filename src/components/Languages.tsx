@@ -178,7 +178,11 @@ export default function Languages(props: Props): JSX.Element {
                     .selectAll("path")
                     .data(stackedData)
                     .join("path")
-                        .attr("fill", (d: any) => colorScale(d.key).toString())
+                        .attr("fill", (d: any) => {
+                            const color = d3.rgb(colorScale(d.key)).toString()
+                            const rgbaColor = color.replace(')', ', 0.8)')
+                            return rgbaColor
+                        })
                         .attr("d", area as any);
             }
         }, [results, svgRef]);
