@@ -136,9 +136,10 @@ export default function Languages(props: Props): JSX.Element {
 
                 // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
-                    .domain([0, resultsWithoutNull.length])
-                    .range([height - margin.top,  margin.bottom]);
+                    .domain([0, Math.round(resultsWithoutNull.length)])
+                    .range([height - margin.top,  margin.bottom])
 
+                // Create a lanugage set to store unique "language" values
                 const languageSet: Set<string> = new Set()
                 resultsWithoutNull.map((commit) => {languageSet.add(commit.language)})
 
@@ -152,6 +153,7 @@ export default function Languages(props: Props): JSX.Element {
                 // Use the stack generator to create a stacked data array.
                 const stackedData = stack(resultsWithoutNull)
 
+                // Create a color map to map the language to a color for the colorScale.
                 const colorMap = resultsWithoutNull.reduce((acc, curr) => {
                     if (!(curr.language in acc)) {
                       acc[curr.language] = curr.color;
@@ -186,6 +188,23 @@ export default function Languages(props: Props): JSX.Element {
                             return rgbaColor
                         })
                         .attr("d", area as any);
+
+                // create x-axis label
+                svg.append("text")
+                    .attr("class", "x label")
+                    .attr("text-anchor", "end")
+                    .attr("x", width - margin.right)
+                    .attr("y", height)
+                    .text("Date of commit");
+
+                // create y-axis label
+                svg.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "end")
+                    .attr("x", -margin.top)
+                    .attr("y", margin.left - (margin.left / 2))
+                    .attr("transform", "rotate(-90)")
+                    .text("Total number of commits")
             }
         }, [results, svgRef]);
 
