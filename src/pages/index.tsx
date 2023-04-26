@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Home from "../components/Home"
 import Profile from "../components/Profile"
 import Languages from '@/components/Languages'
+import Commits from '@/components/Commits'
 
 export default function Index() {
   // Define the structure of the search state
@@ -153,7 +154,7 @@ export default function Index() {
     if(search.submit == true) fetchData()
   }, [search.submit])
 
-  // Render either the Home or Profile component based on whether userData and repoData are null or not
+  // Render either the Home or data analysis components based on whether userData and repoData are null or not
   return (
     <>
       {userData == null && <Home search={search} setSearch={setSearch} numCommits={numCommits} setNumCommits={setNumCommits} />}
@@ -161,6 +162,8 @@ export default function Index() {
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
       {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} />}
+
+      {eventData != null && commitData.length == eventData.length && <Commits commitData={commitData} />}
 
       {error != null && <p>{error}</p>}
     </>
