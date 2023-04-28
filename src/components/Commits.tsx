@@ -31,6 +31,8 @@ export default function Commits(props: Props): JSX.Element {
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
+            // Remove any null values from the results array.
+            const dataWithoutNull = filteredCommitData.filter((item) => item !== null).sort((a, b) => a.date - b.date);
         }, [svgRef]);
 
         // Return the SVG element with the specified dimensions.
