@@ -33,6 +33,11 @@ export default function Commits(props: Props): JSX.Element {
         useEffect(() => {
             // Remove any null values from the results array.
             const dataWithoutNull = filteredCommitData.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+
+            // Define the dimensions of the chart and its margins.
+            const height = 600;
+            const width = 1200;
+            const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
         }, [svgRef]);
 
         // Return the SVG element with the specified dimensions.
