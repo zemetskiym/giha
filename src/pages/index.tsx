@@ -29,6 +29,9 @@ export default function Index() {
       ]
     }
   }
+  interface Parent {
+    url: string
+  }
   interface File {
     patch: string;
     filename: string
@@ -39,7 +42,8 @@ export default function Index() {
           date: string
       }
     }
-    files: Array<File>;
+    parents: Array<Parent>,
+    files: Array<File>
   }
 
   // Set up state variables using the useState hook
