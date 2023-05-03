@@ -63,22 +63,30 @@ export default function Commits(props: Props): JSX.Element {
     }, [])
 
     function cumulativeStackedAreaChart(): JSX.Element {
+        // Check if the required data is available.
+        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
+
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
-            // Remove any null values from the results array.
-            const dataWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+            if(hasData) {
+                // Remove any null values from the results array.
+                const dataWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
 
-            // Define the dimensions of the chart and its margins.
-            const height = 600;
-            const width = 1200;
-            const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
+                // Define the dimensions of the chart and its margins.
+                const height = 600;
+                const width = 1200;
+                const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
+            }
+            
         }, [svgRef]);
 
         // Return the SVG element with the specified dimensions.
-        return <svg ref={svgRef} width="1200" height="600" />;
+        if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
+        if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
+        return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
     
     // Return the component JSX
