@@ -73,12 +73,24 @@ export default function Commits(props: Props): JSX.Element {
         useEffect(() => {
             if(hasData) {
                 // Remove any null values from the results array.
-                const dataWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+                const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+
+                // Select the SVG element using D3.js.
+                const svg = d3.select(svgRef.current);
 
                 // Define the dimensions of the chart and its margins.
                 const height = 600;
                 const width = 1200;
                 const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
+
+                // Determine the earliest and latest dates in the results array.
+                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
+                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: { language: string, color: string, date: Date }) => d.date > max ? d.date : max, resultsWithoutNull[0].date);
+
+                // Create a scale for the x-axis.
+                const x = d3.scaleTime()
+                    .domain([earliestDate, latestDate])
+                    .range([margin.left, width - margin.right]);
             }
             
         }, [svgRef]);
