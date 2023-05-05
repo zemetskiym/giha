@@ -42,13 +42,13 @@ export default function Commits(props: Props): JSX.Element {
 
         // Extract the repository name from the URL using the regular expression pattern.
         // The '!' operator is used to assert that the match function returns a non-null value.
-        const repositoryName = url.match(regex)![1]
+        const repo = url.match(regex)![1]
 
         // Extract the commit date from the Commit object.
         const date = object.commit.author.date
 
         // Check that both the repository name and commit date are not null before returning them in an object.
-        if (repositoryName != null && date != null) return ({repositoryName: repositoryName, date: date})
+        if (repo != null && date != null) return ({repo: repo, date: date})
         else return null
     }
 
@@ -62,7 +62,16 @@ export default function Commits(props: Props): JSX.Element {
         }
     }, [])
 
-    function cumulativeStackedAreaChart(): JSX.Element {
+    function findMaxObjectsWithSameRepo (set: Set<string>, data: Array<any>): number {
+        const maxObjects = [1]
+        for (const repo of set) {
+            const repoCommits = data.filter((commit) => commit.language === repo)
+            maxObjects.push(repoCommits.length)
+        }
+        return Math.max(...maxObjects)
+    }
+
+    function lineChart(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
 
@@ -84,16 +93,31 @@ export default function Commits(props: Props): JSX.Element {
                 const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
 
                 // Determine the earliest and latest dates in the results array.
-                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
-                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: { language: string, color: string, date: Date }) => d.date > max ? d.date : max, resultsWithoutNull[0].date);
+                const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: {repo: string, date: Date}) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
+                const latestDate: Date = resultsWithoutNull.reduce((max: Date, d: {repo: string, date: Date}) => d.date > max ? d.date : max, resultsWithoutNull[0].date);
 
                 // Create a scale for the x-axis.
                 const x = d3.scaleTime()
                     .domain([earliestDate, latestDate])
                     .range([margin.left, width - margin.right]);
+
+                // Create a lanugage set to store unique "language" values
+                const repoSet: Set<string> = new Set()
+                resultsWithoutNull.map((commit) => {repoSet.add(commit.language)})
+
+                // Create a scale for the y-axis.
+                const y = d3.scaleLinear()
+                    .domain([0, findMaxObjectsWithSameRepo(repoSet, resultsWithoutNull)])
+                    .range([height - margin.top,  margin.bottom])
+
+                // Add the x-axis to the chart.
+                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
+
+                // Add the y-axis to the chart.
+                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
             }
             
-        }, [svgRef]);
+        }, [results, svgRef]);
 
         // Return the SVG element with the specified dimensions.
         if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
@@ -106,7 +130,7 @@ export default function Commits(props: Props): JSX.Element {
         <>
             <h1>Commits</h1>
             <>
-                {cumulativeStackedAreaChart()}
+                {lineChart()}
             </>
         </>
     )
