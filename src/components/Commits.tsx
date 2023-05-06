@@ -62,13 +62,22 @@ export default function Commits(props: Props): JSX.Element {
         }
     }, [])
 
-    function findMaxObjectsWithSameRepo (set: Set<string>, data: Array<any>): number {
-        const maxObjects = [1]
+    function findMaxObjectsWithSameRepo(set: Set<string>, data: Array<any>): number {
+        // Initialize an array called 'maxObjects' with a single value of 1
+        const maxObjects = [1];
+        
+        // Loop through each string in the 'set'
         for (const repo of set) {
-            const repoCommits = data.filter((commit) => commit.language === repo)
-            maxObjects.push(repoCommits.length)
+            // Create a new array called 'repoCommits' that contains all the elements in 'data'
+            // where the 'language' property equals the current 'repo' string
+            const repoCommits = data.filter((commit) => commit.language === repo);
+            
+            // Push the length of 'repoCommits' array into the 'maxObjects' array
+            maxObjects.push(repoCommits.length);
         }
-        return Math.max(...maxObjects)
+        
+        // Return the maximum value of all the elements in the 'maxObjects' array
+        return Math.max(...maxObjects);
     }
 
     function lineChart(): JSX.Element {
