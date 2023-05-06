@@ -45,7 +45,7 @@ export default function Commits(props: Props): JSX.Element {
         const repo = url.match(regex)![1]
 
         // Extract the commit date from the Commit object.
-        const date = object.commit.author.date
+        const date = new Date(object.commit.author.date)
 
         // Check that both the repository name and commit date are not null before returning them in an object.
         if (repo != null && date != null) return ({repo: repo, date: date})
