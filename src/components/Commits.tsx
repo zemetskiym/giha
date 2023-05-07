@@ -124,6 +124,23 @@ export default function Commits(props: Props): JSX.Element {
 
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
+
+                // create x-axis label
+                svg.append("text")
+                    .attr("class", "x label")
+                    .attr("text-anchor", "end")
+                    .attr("x", width - margin.right)
+                    .attr("y", height)
+                    .text("Date of commit");
+
+                // create y-axis label
+                svg.append("text")
+                    .attr("class", "y label")
+                    .attr("text-anchor", "end")
+                    .attr("x", -margin.top)
+                    .attr("y", margin.left - (margin.left / 2))
+                    .attr("transform", "rotate(-90)")
+                    .text("Total number of commits")
             }
             
         }, [results, svgRef]);
