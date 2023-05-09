@@ -80,7 +80,7 @@ export default function Commits(props: Props): JSX.Element {
         return Math.max(...maxObjects);
     }
 
-    function lineChart(): JSX.Element {
+    function barcodePlot(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
 
@@ -115,9 +115,10 @@ export default function Commits(props: Props): JSX.Element {
                 resultsWithoutNull.map((commit) => {repoSet.add(commit.language)})
 
                 // Create a scale for the y-axis.
-                const y = d3.scaleLinear()
-                    .domain([0, findMaxObjectsWithSameRepo(repoSet, resultsWithoutNull)])
-                    .range([height - margin.top,  margin.bottom])
+                const y = d3.scaleBand()
+                    .domain(resultsWithoutNull.map(d => d.repo))
+                    .rangeRound([margin.top, height - margin.bottom])
+                    .padding(0.1)
 
                 // Add the x-axis to the chart.
                 svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
@@ -132,15 +133,6 @@ export default function Commits(props: Props): JSX.Element {
                     .attr("x", width - margin.right)
                     .attr("y", height)
                     .text("Date of commit");
-
-                // create y-axis label
-                svg.append("text")
-                    .attr("class", "y label")
-                    .attr("text-anchor", "end")
-                    .attr("x", -margin.top)
-                    .attr("y", margin.left - (margin.left / 2))
-                    .attr("transform", "rotate(-90)")
-                    .text("Total number of commits")
             }
             
         }, [results, svgRef]);
@@ -156,7 +148,7 @@ export default function Commits(props: Props): JSX.Element {
         <>
             <h1>Commits</h1>
             <>
-                {lineChart()}
+                {barcodePlot()}
             </>
         </>
     )
