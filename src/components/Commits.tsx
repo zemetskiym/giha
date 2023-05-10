@@ -110,13 +110,13 @@ export default function Commits(props: Props): JSX.Element {
                     .domain([earliestDate, latestDate])
                     .range([margin.left, width - margin.right]);
 
-                // Create a lanugage set to store unique "language" values
+                // Create a lanugage set to store unique "repo" values
                 const repoSet: Set<string> = new Set()
-                resultsWithoutNull.map((commit) => {repoSet.add(commit.language)})
+                resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
 
                 // Create a scale for the y-axis.
                 const y = d3.scaleBand()
-                    .domain(resultsWithoutNull.map(d => d.repo))
+                    .domain(repoSet)
                     .rangeRound([margin.top, height - margin.bottom])
                     .padding(0.1)
 
