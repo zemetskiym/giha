@@ -132,7 +132,21 @@ export default function Commits(props: Props): JSX.Element {
                     .attr("text-anchor", "end")
                     .attr("x", width - margin.right)
                     .attr("y", height)
-                    .text("Date of commit");
+                    .text("Date of commit")
+
+                svg.append("g")
+                        .attr("fill", "steelblue")
+                        .attr("stroke-width", 10)
+                        .attr("pointer-events", "all")
+                    .selectAll("rect")
+                    .data(resultsWithoutNull)
+                    .join("rect")
+                        .attr("x", d => x(d.date) - 0.75)
+                        .attr("y", d => y(d.repo)!)
+                        .attr("width", 1.5)
+                        .attr("height", y.bandwidth())
+                    .append("title")
+                        .text(d => `${d.date.toDateString()} ${d.repo}`);
             }
             
         }, [results, svgRef]);
