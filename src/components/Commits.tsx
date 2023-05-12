@@ -134,6 +134,7 @@ export default function Commits(props: Props): JSX.Element {
                     .attr("y", height)
                     .text("Date of commit")
 
+                // Create bars for data
                 svg.append("g")
                         .attr("fill", "steelblue")
                         .attr("stroke-width", 10)
