@@ -135,7 +135,7 @@ export default function Index() {
       eventData.forEach((event: Partial<Event>) => {
         // Call async fetchCommit function because async operations are not allowed in forEach loops
         if (event.payload!.commits != undefined) {
-          fetchCommit(event.actor!.login, event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+          fetchCommit(event.repo!.name.split("/")[0], event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
         } else {
           setCommitData(prev => [...prev, null])
         }
