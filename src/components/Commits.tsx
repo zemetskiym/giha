@@ -110,6 +110,14 @@ export default function Commits(props: Props): JSX.Element {
                     .domain([earliestDate, latestDate])
                     .range([margin.left, width - margin.right]);
 
+                // Define the x-axis with tick lines, guidelines, and no axis line.
+                const xAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
+                    .call(d3.axisBottom(x))
+                    .call((g: d3.Selection<SVGGElement, unknown, null, undefined>) => g.selectAll(".tick line").clone()
+                        .attr("stroke-opacity", 0.1)
+                        .attr("y1", -height + margin.bottom + margin.top))
+                    .call((g: d3.Selection<SVGGElement, unknown, null, undefined>) => g.selectAll(".domain").remove())
+
                 // Create a lanugage set to store unique "repo" values
                 const repoSet: Set<string> = new Set()
                 resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
@@ -121,7 +129,7 @@ export default function Commits(props: Props): JSX.Element {
                     .padding(0.1)
 
                 // Add the x-axis to the chart.
-                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x))
+                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(xAxis)
 
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
