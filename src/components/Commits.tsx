@@ -113,10 +113,10 @@ export default function Commits(props: Props): JSX.Element {
                 // Define the x-axis with tick lines, guidelines, and no axis line.
                 const xAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
                     .call(d3.axisBottom(x))
-                    .call((g: d3.Selection<SVGGElement, unknown, null, undefined>) => g.selectAll(".tick line").clone()
+                    .call(g => g.selectAll(".tick line").clone()
                         .attr("stroke-opacity", 0.1)
                         .attr("y1", -height + margin.bottom + margin.top))
-                    .call((g: d3.Selection<SVGGElement, unknown, null, undefined>) => g.selectAll(".domain").remove())
+                    .call(g => g.selectAll(".domain").remove())
 
                 // Create a lanugage set to store unique "repo" values
                 const repoSet: Set<string> = new Set()
@@ -128,11 +128,18 @@ export default function Commits(props: Props): JSX.Element {
                     .rangeRound([margin.top, height - margin.bottom])
                     .padding(0.1)
 
+                // Define the y-axis with tick lines, guidelines, and no axis line.
+                const yAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y))
+                    .call(g => g.selectAll(".tick line").clone().attr("stroke-opacity", 0.1).attr("x2", width - margin.right - margin.left))
+                    .call(g => g.selectAll(".domain").remove())
+
                 // Add the x-axis to the chart.
                 svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(xAxis)
 
                 // Add the y-axis to the chart.
-                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y))
+                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis)
 
                 // create x-axis label
                 svg.append("text")
