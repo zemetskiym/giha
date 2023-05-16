@@ -96,10 +96,16 @@ export default function Commits(props: Props): JSX.Element {
                 // Select the SVG element using D3.js.
                 const svg = d3.select(svgRef.current);
 
-                // Define the dimensions of the chart and its margins.
-                const height = 600;
-                const width = 1200;
-                const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
+                // Define the margins of the chart.
+                const margin = ({top: 10, right: 10, bottom: 20, left: 40})
+
+                // Create a lanugage set to store unique "repo" values.
+                const repoSet: Set<string> = new Set()
+                resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
+
+                // Define the dimensions of the chart.
+                const height = repoSet.size * 30 + 30
+                const width = 1200
 
                 // Determine the earliest and latest dates in the results array.
                 const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: {repo: string, date: Date}) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
@@ -117,10 +123,6 @@ export default function Commits(props: Props): JSX.Element {
                         .attr("stroke-opacity", 0.1)
                         .attr("y1", -height + margin.bottom + margin.top))
                     .call(g => g.selectAll(".domain").remove())
-
-                // Create a lanugage set to store unique "repo" values
-                const repoSet: Set<string> = new Set()
-                resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
 
                 // Create a scale for the y-axis.
                 const y = d3.scaleBand()
@@ -141,14 +143,6 @@ export default function Commits(props: Props): JSX.Element {
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis)
 
-                // create x-axis label
-                svg.append("text")
-                    .attr("class", "x label")
-                    .attr("text-anchor", "end")
-                    .attr("x", width - margin.right)
-                    .attr("y", height)
-                    .text("Date of commit")
-
                 // Create bars for data
                 svg.append("g")
                         .attr("fill", "steelblue")
@@ -168,7 +162,11 @@ export default function Commits(props: Props): JSX.Element {
         }, [results, svgRef]);
 
         // Return the SVG element with the specified dimensions.
-        if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
+        if (hasData) {
+            const repoSet: Set<string> = new Set()
+            results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)})
+            return <svg ref={svgRef} width="1200" height={repoSet.size * 30 + 30} />
+        }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
