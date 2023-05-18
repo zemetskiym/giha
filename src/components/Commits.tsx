@@ -143,7 +143,7 @@ export default function Commits(props: Props): JSX.Element {
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis)
 
-                // Create bars for data
+                // Create bars for data.
                 svg.append("g")
                         .attr("fill", "steelblue")
                         .attr("stroke-width", 10)
@@ -157,6 +157,10 @@ export default function Commits(props: Props): JSX.Element {
                         .attr("height", y.bandwidth())
                     .append("title")
                         .text(d => `${d.date.toDateString()} ${d.repo}`);
+
+                // Set text font size.
+                svg.selectAll("text")
+                    .style("font-size", "12px")
             }
             
         }, [results, svgRef]);
