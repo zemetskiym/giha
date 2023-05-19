@@ -205,6 +205,10 @@ export default function Languages(props: Props): JSX.Element {
                     .attr("y", margin.left - (margin.left / 2))
                     .attr("transform", "rotate(-90)")
                     .text("Total number of commits")
+
+                // Set text font size.
+                svg.selectAll("text")
+                    .style("font-size", "12px")
             }
         }, [results, svgRef]);
 
