@@ -62,24 +62,6 @@ export default function Commits(props: Props): JSX.Element {
         }
     }, [])
 
-    function findMaxObjectsWithSameRepo(set: Set<string>, data: Array<any>): number {
-        // Initialize an array called 'maxObjects' with a single value of 1
-        const maxObjects = [1];
-        
-        // Loop through each string in the 'set'
-        for (const repo of set) {
-            // Create a new array called 'repoCommits' that contains all the elements in 'data'
-            // where the 'language' property equals the current 'repo' string
-            const repoCommits = data.filter((commit) => commit.language === repo);
-            
-            // Push the length of 'repoCommits' array into the 'maxObjects' array
-            maxObjects.push(repoCommits.length);
-        }
-        
-        // Return the maximum value of all the elements in the 'maxObjects' array
-        return Math.max(...maxObjects);
-    }
-
     function barcodePlot(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
