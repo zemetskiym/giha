@@ -116,7 +116,6 @@ export default function Commits(props: Props): JSX.Element {
 
                 // Calculate the longest repo width based on the computed text
                 const longestRepoWidth = temporaryTextElement.node()?.getComputedTextLength()
-                console.log(longestRepoWidth)
 
                 // Remove the temporary text element from the DOM.
                 temporaryTextElement.remove()
