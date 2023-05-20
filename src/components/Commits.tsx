@@ -96,12 +96,33 @@ export default function Commits(props: Props): JSX.Element {
                 // Select the SVG element using D3.js.
                 const svg = d3.select(svgRef.current);
 
-                // Define the margins of the chart.
-                const margin = ({top: 10, right: 10, bottom: 20, left: 40})
-
                 // Create a lanugage set to store unique "repo" values.
                 const repoSet: Set<string> = new Set()
                 resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
+
+                // Find the string of the longest repository name.
+                let longestRepoName = ""
+                repoSet.forEach(function(string) {
+                    if (string.length > longestRepoName.length) {
+                        longestRepoName = string
+                    }
+                })
+
+                // Generate a temporary text element in the DOM.
+                const temporaryTextElement = svg.append("text")
+                    .text(longestRepoName)
+                    .style("font-size", "12px")
+                    .style("font-family", "Arial")
+
+                // Calculate the longest repo width based on the computed text
+                const longestRepoWidth = temporaryTextElement.node()?.getComputedTextLength()
+                console.log(longestRepoWidth)
+
+                // Remove the temporary text element from the DOM.
+                temporaryTextElement.remove()
+
+                // Define the margins of the chart.
+                const margin = ({top: 10, right: 20, bottom: 20, left: (longestRepoWidth || 200) + 20})
 
                 // Define the dimensions of the chart.
                 const height = repoSet.size * 30 + 30
