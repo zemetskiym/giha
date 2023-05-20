@@ -122,7 +122,7 @@ export default function Commits(props: Props): JSX.Element {
                 temporaryTextElement.remove()
 
                 // Define the margins of the chart.
-                const margin = ({top: 10, right: 20, bottom: 20, left: (longestRepoWidth || 200) + 20})
+                const margin = ({top: 10, right: 20, bottom: 22, left: (longestRepoWidth || 200) + 20})
 
                 // Define the dimensions of the chart.
                 const height = repoSet.size * 30 + 30
