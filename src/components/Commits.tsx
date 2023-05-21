@@ -62,7 +62,7 @@ export default function Commits(props: Props): JSX.Element {
         }
     }, [])
 
-    function barcodePlot(): JSX.Element {
+    function BarcodePlot(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
 
@@ -160,9 +160,12 @@ export default function Commits(props: Props): JSX.Element {
                     .append("title")
                         .text(d => `${d.date.toDateString()} ${d.repo}`);
 
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
                 // Set text font size.
                 svg.selectAll("text")
-                    .style("font-size", "12px")
+                    .style("font-size", `${12 / baseFontSize}rem`)
             }
             
         }, [results, svgRef]);
@@ -182,7 +185,7 @@ export default function Commits(props: Props): JSX.Element {
         <>
             <h1>Commits</h1>
             <>
-                {barcodePlot()}
+                {BarcodePlot()}
             </>
         </>
     )
