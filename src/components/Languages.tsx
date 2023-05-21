@@ -187,7 +187,9 @@ export default function Languages(props: Props): JSX.Element {
                             const rgbaColor = color.replace(')', ', 0.8)')
                             return rgbaColor
                         })
-                        .attr("d", area as any);
+                        .attr("d", area as any)
+                    .append("title")
+                        .text(d => d.key);
 
                 // create x-axis label
                 svg.append("text")
