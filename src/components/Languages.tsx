@@ -103,7 +103,7 @@ export default function Languages(props: Props): JSX.Element {
     }, [])
 
     // Define a function that creates a cumulative stacked area chart using D3.js.
-    function cumulativeStackedAreaChart(): JSX.Element {
+    function CumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
 
@@ -225,7 +225,7 @@ export default function Languages(props: Props): JSX.Element {
         <>
             <h1>Languages</h1>
             <>
-                {cumulativeStackedAreaChart()}
+                {CumulativeStackedAreaChart()}
             </>
         </>
     )
