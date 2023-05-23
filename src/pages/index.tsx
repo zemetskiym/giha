@@ -183,7 +183,7 @@ export default function Index() {
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
-      {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} />}
+      {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} windowSize={windowSize} />}
 
       {eventData != null && commitData.length == eventData.length && <Commits commitData={commitData} windowSize={windowSize} />}
 

@@ -19,14 +19,15 @@ interface Commit {
     files: Array<File>;
 }
 interface Props {
-    commitData: Array<Commit | null>;
+    commitData: Array<Commit | null>,
+    windowSize: {height: number, width: number}
 }
 
 // Define the functional component Languages and pass in Props
 export default function Languages(props: Props): JSX.Element {
 
     // Destructure the props object
-    const {commitData = []} = props
+    const {commitData = [], windowSize} = props
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
 
     // Declare an empty array to store results
@@ -120,9 +121,12 @@ export default function Languages(props: Props): JSX.Element {
                 // Select the SVG element using D3.js.
                 const svg = d3.select(svgRef.current);
 
+                // Clear the SVG by removing all existing elements.
+                svg.selectAll('*').remove();
+
                 // Define the dimensions of the chart and its margins.
                 const height = 600;
-                const width = 1200;
+                const width = Math.min(windowSize.width, 1200);
                 const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
 
                 // Determine the earliest and latest dates in the results array.
@@ -212,10 +216,10 @@ export default function Languages(props: Props): JSX.Element {
                 svg.selectAll("text")
                     .style("font-size", "12px")
             }
-        }, [results, svgRef]);
+        }, [results, svgRef, windowSize]);
 
         // Return the SVG element with the specified dimensions.
-        if (hasData) return <svg ref={svgRef} width="1200" height="600" />;
+        if (hasData) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height="600" />;
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
