@@ -20,13 +20,14 @@ interface Commit {
     files: Array<File>
 }
 interface Props {
-    commitData: Array<Commit | null>
+    commitData: Array<Commit | null>,
+    windowSize: {height: number, width: number}
 }
 
 export default function Commits(props: Props): JSX.Element {
     
     // Destructure the props object
-    const {commitData = []} = props
+    const {commitData = [], windowSize} = props
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
 
     // Declare an empty array to store results
@@ -78,6 +79,9 @@ export default function Commits(props: Props): JSX.Element {
                 // Select the SVG element using D3.js.
                 const svg = d3.select(svgRef.current);
 
+                // Clear the SVG by removing all existing elements.
+                svg.selectAll('*').remove();
+
                 // Create a lanugage set to store unique "repo" values.
                 const repoSet: Set<string> = new Set()
                 resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)})
@@ -107,7 +111,7 @@ export default function Commits(props: Props): JSX.Element {
 
                 // Define the dimensions of the chart.
                 const height = repoSet.size * 30 + 30
-                const width = 1200
+                const width = Math.min(windowSize.width, 1200)
 
                 // Determine the earliest and latest dates in the results array.
                 const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: {repo: string, date: Date}) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
@@ -168,13 +172,13 @@ export default function Commits(props: Props): JSX.Element {
                     .style("font-size", `${12 / baseFontSize}rem`)
             }
             
-        }, [results, svgRef]);
+        }, [results, svgRef, windowSize]);
 
         // Return the SVG element with the specified dimensions.
         if (hasData) {
             const repoSet: Set<string> = new Set()
             results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)})
-            return <svg ref={svgRef} width="1200" height={repoSet.size * 30 + 30} />
+            return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 30} />
         }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>

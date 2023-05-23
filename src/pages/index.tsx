@@ -54,6 +54,24 @@ export default function Index() {
   const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null)
   const [commitData, setCommitData] = useState<Array<Commit | null>>([])
   const [error, setError] = useState<string | null>(null)
+  const [windowSize, setWindowSize] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    }
+
+    // Add event listener to update window size on resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial window size
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+
+    // Cleanup the event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   // Define an asynchronous function to fetch commit data from the Github API
   async function fetchCommit(owner: string, repo: string, sha: string) {
@@ -167,7 +185,7 @@ export default function Index() {
       
       {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} />}
 
-      {eventData != null && commitData.length == eventData.length && <Commits commitData={commitData} />}
+      {eventData != null && commitData.length == eventData.length && <Commits commitData={commitData} windowSize={windowSize} />}
 
       {error != null && <p>{error}</p>}
     </>
