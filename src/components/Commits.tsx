@@ -107,10 +107,10 @@ export default function Commits(props: Props): JSX.Element {
                 temporaryTextElement.remove()
 
                 // Define the margins of the chart.
-                const margin = ({top: 10, right: 20, bottom: 22, left: (longestRepoWidth || 200) + 20})
+                const margin = ({top: 10, right: 20, bottom: 42, left: (longestRepoWidth || 200) + 20})
 
                 // Define the dimensions of the chart.
-                const height = repoSet.size * 30 + 30
+                const height = repoSet.size * 30 + margin.top + margin.bottom
                 const width = Math.min(windowSize.width, 1200)
 
                 // Determine the earliest and latest dates in the results array.
@@ -144,7 +144,20 @@ export default function Commits(props: Props): JSX.Element {
                     .call(g => g.selectAll(".domain").remove())
 
                 // Add the x-axis to the chart.
-                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(xAxis)
+                if (windowSize.width < 700) {
+                    svg.append('g')
+                    .attr('transform', `translate(0,${height - margin.bottom})`)
+                    .call(xAxis)
+                    .selectAll('text')
+                    .style('text-anchor', 'end')
+                    .attr('transform', 'rotate(-45)')
+                    .attr('dx', '-.8em')
+                    .attr('dy', '.15em');
+                } else {
+                    svg.append('g')
+                    .attr('transform', `translate(0,${height - margin.bottom})`)
+                    .call(xAxis);
+                }  
 
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis)
@@ -178,7 +191,7 @@ export default function Commits(props: Props): JSX.Element {
         if (hasData) {
             const repoSet: Set<string> = new Set()
             results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)})
-            return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 30} />
+            return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 52} />
         }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
