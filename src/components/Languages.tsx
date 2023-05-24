@@ -125,7 +125,7 @@ export default function Languages(props: Props): JSX.Element {
                 svg.selectAll('*').remove();
 
                 // Define the dimensions of the chart and its margins.
-                const height = 600;
+                const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
                 const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
 
@@ -219,7 +219,7 @@ export default function Languages(props: Props): JSX.Element {
         }, [results, svgRef, windowSize]);
 
         // Return the SVG element with the specified dimensions.
-        if (hasData) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height="600" />;
+        if (hasData) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={Math.min(windowSize.width / 2, 600)} />;
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
