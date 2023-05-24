@@ -195,23 +195,6 @@ export default function Languages(props: Props): JSX.Element {
                     .append("title")
                         .text(d => d.key);
 
-                // create x-axis label
-                svg.append("text")
-                    .attr("class", "x label")
-                    .attr("text-anchor", "end")
-                    .attr("x", width - margin.right)
-                    .attr("y", height)
-                    .text("Date of commit");
-
-                // create y-axis label
-                svg.append("text")
-                    .attr("class", "y label")
-                    .attr("text-anchor", "end")
-                    .attr("x", -margin.top)
-                    .attr("y", margin.left - (margin.left / 2))
-                    .attr("transform", "rotate(-90)")
-                    .text("Total number of commits")
-
                 // Set text font size.
                 svg.selectAll("text")
                     .style("font-size", "12px")
