@@ -127,7 +127,7 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the dimensions of the chart and its margins.
                 const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
-                const margin = { top: 0.1 * height, right: 0.1 * width, bottom: 0.1 * height, left: 0.1 * width };
+                const margin = {top: 10, right: 20, bottom: 42, left: 30};
 
                 // Determine the earliest and latest dates in the results array.
                 const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
@@ -141,7 +141,7 @@ export default function Languages(props: Props): JSX.Element {
                 // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
                     .domain([0, Math.round(resultsWithoutNull.length)])
-                    .range([height - margin.top,  margin.bottom])
+                    .range([height - margin.bottom,  margin.top])
 
                 // Create a lanugage set to store unique "language" values
                 const languageSet: Set<string> = new Set()
