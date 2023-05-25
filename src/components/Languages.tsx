@@ -176,7 +176,18 @@ export default function Languages(props: Props): JSX.Element {
                     .y1((d: any) => y(d[1]));
 
                 // Add the x-axis to the chart.
-                svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x));
+                if (windowSize.width < 700) {
+                    svg.append('g')
+                        .attr('transform', `translate(0,${height - margin.bottom})`)
+                        .call(d3.axisBottom(x))
+                        .selectAll('text')
+                        .style('text-anchor', 'end')
+                        .attr('transform', 'rotate(-45)')
+                        .attr('dx', '-.8em')
+                        .attr('dy', '.15em');
+                } else {
+                    svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x));
+                }
 
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y));
