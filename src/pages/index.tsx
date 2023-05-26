@@ -5,6 +5,7 @@ import Home from "../components/Home"
 import Profile from "../components/Profile"
 import Languages from '@/components/Languages'
 import Commits from '@/components/Commits'
+import FunFacts from '@/components/FunFacts'
 
 export default function Index() {
   // Define the structure of the search state
@@ -186,6 +187,8 @@ export default function Index() {
       {eventData != null && commitData.length == eventData.length && <Languages commitData={commitData} windowSize={windowSize} />}
 
       {eventData != null && commitData.length == eventData.length && <Commits commitData={commitData} windowSize={windowSize} />}
+
+      {eventData != null && commitData.length == eventData.length && <FunFacts commitData={commitData} windowSize={windowSize} />}
 
       {error != null && <p>{error}</p>}
     </>
