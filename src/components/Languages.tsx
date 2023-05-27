@@ -138,10 +138,21 @@ export default function Languages(props: Props): JSX.Element {
                     .domain([earliestDate, latestDate])
                     .range([margin.left, width - margin.right]);
 
+                // Define the x-axis with tick lines, guidelines, and no axis line.
+                const xAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
+                    .call(d3.axisBottom(x))
+                    .call(g => g.selectAll(".domain").remove());
+
                 // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
                     .domain([0, Math.round(resultsWithoutNull.length)])
                     .range([height - margin.bottom,  margin.top])
+
+                // Define the y-axis with tick lines, guidelines, and no axis line.
+                const yAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
+                    .attr("transform", `translate(${margin.left},0)`)
+                    .call(d3.axisLeft(y))
+                    .call(g => g.selectAll(".domain").remove());
 
                 // Create a lanugage set to store unique "language" values
                 const languageSet: Set<string> = new Set()
@@ -179,18 +190,18 @@ export default function Languages(props: Props): JSX.Element {
                 if (windowSize.width < 700) {
                     svg.append('g')
                         .attr('transform', `translate(0,${height - margin.bottom})`)
-                        .call(d3.axisBottom(x))
+                        .call(xAxis)
                         .selectAll('text')
                         .style('text-anchor', 'end')
                         .attr('transform', 'rotate(-45)')
                         .attr('dx', '-.8em')
                         .attr('dy', '.15em');
                 } else {
-                    svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x));
+                    svg.append('g').attr('transform', `translate(0,${height - margin.bottom})`).call(xAxis);
                 }
 
                 // Add the y-axis to the chart.
-                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y));
+                svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis);
 
                 // Add the stacked areas to the chart.
                 svg.append("g")
