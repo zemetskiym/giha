@@ -28,6 +28,7 @@ export default function Commits(props: Props): JSX.Element {
     // Destructure the props object
     const {commitData = [], windowSize} = props;
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>;
+    console.log(filteredCommitData)
 
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
 
@@ -82,13 +83,38 @@ export default function Commits(props: Props): JSX.Element {
             sum += commit.files[0].patch.split("\n").length;
         };
         return sum / filteredCommitData.length;
-    }
+    };
+
+    // Function to return the day of the week with the most commits
+    function timeOfWeek(filteredCommitData: Array<Commit>): string {
+        // Initialize count object
+        let count: Record<string, number> = {Sunday: 0, Monday: 0, Tuesday: 0, Wednesday: 0, Thursday: 0, Friday: 0, Saturday: 0};
+
+        // Iterate over filtered commit data
+        for (let commit of filteredCommitData) {
+            const date = new Date(commit.commit.author.date);
+            const day = date.getDay();
+            count[Object.keys(count)[day]] += 1;
+        };
+
+        // Find the day with the most commits
+        const maxProperty = Object.entries(count).reduce((prev, [prop, value]) => {
+            if (value > prev.value) {
+              return { prop, value };
+            };
+            return prev;
+        }, { prop: '', value: -Infinity });
+        
+        // Return the most productive day of the week
+        return maxProperty.prop;
+    };
 
     return (
         <>
             <h1>Fun Facts</h1>
             <div>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
             <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
+            <div>My most productive days are {timeOfWeek(filteredCommitData)}s</div>
         </>
     );
 };
