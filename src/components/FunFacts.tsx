@@ -75,9 +75,19 @@ export default function Commits(props: Props): JSX.Element {
         return "camelCase"; // Default convention
     };
 
+    // Function to count the average LOC per commit
+    function findAvgLOC(filteredCommitData: Array<Commit>): number {
+        let sum = 0;
+        for (let commit of filteredCommitData) {
+            sum += commit.files[0].patch.split("\n").length;
+        };
+        return sum / filteredCommitData.length;
+    }
+
     return (
         <>
             <h1>Fun Facts</h1>
+            <div>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
             <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
         </>
     );
