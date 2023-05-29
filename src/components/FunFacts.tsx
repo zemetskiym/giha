@@ -86,7 +86,7 @@ export default function Commits(props: Props): JSX.Element {
     };
 
     // Function to return the day of the week with the most commits
-    function timeOfWeek(filteredCommitData: Array<Commit>): string {
+    function findMostProductiveDayOfWeek(filteredCommitData: Array<Commit>): string {
         // Initialize count object
         let count: Record<string, number> = {Sunday: 0, Monday: 0, Tuesday: 0, Wednesday: 0, Thursday: 0, Friday: 0, Saturday: 0};
 
@@ -109,12 +109,40 @@ export default function Commits(props: Props): JSX.Element {
         return maxProperty.prop;
     };
 
+    // Function to find the most productive time of day
+    function findMostProductiveTimeOfDay(filteredCommitData: Array<Commit>): string {
+        // Initialize count object
+        let count: Record<string, number> = {morning: 0, afternoon: 0, evening: 0, night: 0};
+
+        // Iterate over filtered commit data
+        for (let commit of filteredCommitData) {
+            const date = new Date(commit.commit.author.date);
+            const hour = date.getHours();
+            if (hour < 12) count.morning += 1;
+            else if (hour < 17) count.afternoon += 1;
+            else if (hour < 20) count.evening += 1;
+            else count.night += 1;
+        };
+
+        // Find the most productive time of day
+        const maxProperty = Object.entries(count).reduce((prev, [prop, value]) => {
+            if (value > prev.value) {
+              return { prop, value };
+            };
+            return prev;
+        }, { prop: '', value: -Infinity });
+        
+        // Return the most productive time of day
+        return maxProperty.prop;
+    };
+
     return (
         <>
             <h1>Fun Facts</h1>
             <div>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
             <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
-            <div>My most productive days are {timeOfWeek(filteredCommitData)}s</div>
+            <div>My most productive days are {findMostProductiveDayOfWeek(filteredCommitData)}s</div>
+            <div>I commit my code in {findMostProductiveTimeOfDay(filteredCommitData)}s</div>
         </>
     );
 };
