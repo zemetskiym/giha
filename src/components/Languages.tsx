@@ -140,8 +140,7 @@ export default function Languages(props: Props): JSX.Element {
 
                 // Define the x-axis with tick lines, guidelines, and no axis line.
                 const xAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
-                    .call(d3.axisBottom(x))
-                    .call(g => g.selectAll(".domain").remove());
+                    .call(d3.axisBottom(x));
 
                 // Create a scale for the y-axis.
                 const y = d3.scaleLinear()
@@ -151,8 +150,7 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the y-axis with tick lines, guidelines, and no axis line.
                 const yAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
                     .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y))
-                    .call(g => g.selectAll(".domain").remove());
+                    .call(d3.axisLeft(y));
 
                 // Create a lanugage set to store unique "language" values
                 const languageSet: Set<string> = new Set()
