@@ -238,6 +238,33 @@ export default function Commits(props: Props): JSX.Element {
         return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
     }
 
+    function LOCBarChart(): JSX.Element {
+        // Check if the required data is available.
+        const hasData = filteredCommitData.length > 0;
+        if (!hasData) {
+            return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
+        }
+
+        // Create a reference to the SVG element that will be rendered.
+        const svgRef = useRef<SVGSVGElement>(null);
+
+        useEffect(() => {
+            // Select the SVG element using D3.js.
+            const svg = d3.select(svgRef.current);
+
+            // Clear the SVG by removing all existing elements.
+            svg.selectAll('*').remove();
+
+            // Define the dimensions of the chart and its margins.
+            const height = Math.min(windowSize.width / 2, 600);
+            const width = Math.min(windowSize.width / 2, 600);
+            const margin = {top: 20, right: 20, bottom: 42, left: 20};
+
+        }, [svgRef, windowSize])
+
+        return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />
+    }
+
     return (
         <>
             <h1>Fun Facts</h1>
