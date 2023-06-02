@@ -146,9 +146,6 @@ export default function Commits(props: Props): JSX.Element {
     function TimeOfWeekLineGraph(): JSX.Element {
         // Check if the required data is available.
         const hasData = filteredCommitData.length > 0;
-        if (!hasData) {
-            return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
-        }
 
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
@@ -246,6 +243,9 @@ export default function Commits(props: Props): JSX.Element {
             .style("font-size", `${12 / baseFontSize}rem`);
         }, [svgRef, windowSize]);
 
+        if (!hasData) {
+            return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
+        }
         return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
     }
 
@@ -280,9 +280,6 @@ export default function Commits(props: Props): JSX.Element {
     function LOCBarChart(): JSX.Element {
         // Check if the required data is available.
         const hasData = filteredCommitData.length > 0;
-        if (!hasData) {
-            return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
-        }
 
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
@@ -379,6 +376,9 @@ export default function Commits(props: Props): JSX.Element {
                 .style("font-size", `${12 / baseFontSize}rem`);
         }, [svgRef, windowSize])
 
+        if (!hasData) {
+            return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
+        }
         return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />
     }
 
