@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '@/styles/Index.module.css'
 import { useState, useEffect } from 'react'
-import Home from "../components/Home"
+import Home from "../components/landing/Landing"
 import Profile from "../components/Profile"
 import Languages from '@/components/Languages'
 import Commits from '@/components/Commits'

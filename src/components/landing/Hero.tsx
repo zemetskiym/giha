@@ -1,6 +1,4 @@
-// Importing styles and useState hook from React
-import styles from "@/styles/components/Home.module.css"
-import { useState } from "react"
+import styles from "@/styles/components/landing/Hero.module.css"
 
 // Defining the Search interface
 interface Search {
@@ -16,8 +14,8 @@ interface Props {
     setNumCommits: React.Dispatch<React.SetStateAction<number>>
 }
 
-// Defining the Home component, which takes in Props and returns a JSX element
-export default function Home (props: Props): JSX.Element {
+// Defining the Hero component, which takes in Props and returns a JSX element
+export default function Hero (props: Props): JSX.Element {
     const { search, setSearch, numCommits, setNumCommits } = props;
 
     // Defining a function to handle form submissions
