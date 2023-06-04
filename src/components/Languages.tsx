@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js'
 import { languageColors } from "../../public/languageColors";
 import * as d3 from "d3";
+import { useWindowSizeContext } from '@/components/context';
 
 // Define types/interfaces
 interface File {
@@ -19,15 +20,16 @@ interface Commit {
     files: Array<File>;
 }
 interface Props {
-    commitData: Array<Commit | null>,
-    windowSize: {height: number, width: number}
+    commitData: Array<Commit | null>
 }
 
 // Define the functional component Languages and pass in Props
 export default function Languages(props: Props): JSX.Element {
+    // Import the window size context
+    const windowSize = useWindowSizeContext();
 
     // Destructure the props object
-    const {commitData = [], windowSize} = props
+    const {commitData = []} = props
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
 
     // Declare an empty array to store results

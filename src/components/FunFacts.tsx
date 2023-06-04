@@ -1,6 +1,7 @@
 import styles from "../styles/components/FunFacts.module.css";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
+import { useWindowSizeContext } from '@/components/context';
 
 // Define types/interfaces
 interface Parent {
@@ -20,14 +21,15 @@ interface Commit {
     files: Array<File>
 }
 interface Props {
-    commitData: Array<Commit | null>,
-    windowSize: {height: number, width: number}
+    commitData: Array<Commit | null>
 }
 
 export default function Commits(props: Props): JSX.Element {
+    // Import the window size context
+    const windowSize = useWindowSizeContext();
 
     // Destructure the props object
-    const {commitData = [], windowSize} = props;
+    const {commitData = []} = props;
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>;
 
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
