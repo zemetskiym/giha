@@ -32,7 +32,7 @@ export default function Hero (props: Props): JSX.Element {
     }
 
     // Create a function to render a d3.js globe.
-    function renderGlobe(): JSX.Element {
+    function RenderGlobe(): JSX.Element {
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
 
@@ -105,7 +105,7 @@ export default function Hero (props: Props): JSX.Element {
     return (
         <section>
             <div>
-                {renderGlobe()}
+                {RenderGlobe()}
             </div>
             <form onSubmit={event => handleSubmit(event)}>
                 <input 
