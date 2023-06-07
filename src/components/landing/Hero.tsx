@@ -46,18 +46,59 @@ export default function Hero (props: Props): JSX.Element {
                     const svg = d3.select(svgRef.current);
                     svg.selectAll('*').remove();
             
-                    const height = Math.min(windowSize.width / 2, 600);
-                    const width = Math.min(windowSize.width / 2, 600);
+                    const height = Math.min(windowSize.width, 600);
+                    const width = Math.min(windowSize.width, 600);
                     const sensitivity = 75;
+
+                    let projection = d3.geoOrthographic()
+                        .scale(250)
+                        .center([0, 0])
+                        .rotate([0,-30])
+                        .translate([width / 2, height / 2]);
+
+                    let path: any = d3.geoPath().projection(projection);
+
+                    let globe = svg.append("circle")
+                        .attr("fill", "#EEE")
+                        .attr("stroke", "#000")
+                        .attr("stroke-width", "0.2")
+                        .attr("cx", width/2)
+                        .attr("cy", height/2)
+                        .attr("r", projection.scale());
+
+                    let map = svg.append("g")
+
+                    map.append("g")
+                        .attr("class", "countries" )
+                        .selectAll("path")
+                        .data(geojson.features)
+                        .enter().append("path")
+                        .attr("class", (d: any) => "country_" + d.properties.name.replace(" ","_"))
+                        .attr("d", path)
+                        .attr("fill", "white")
+                        .style('stroke', 'black')
+                        .style('stroke-width', 0.3)
+                        .style("opacity",0.8)
+
+                    d3.timer(function() {
+                            const rotate = projection.rotate()
+                            const k = sensitivity / projection.scale()
+                            projection.rotate([
+                              rotate[0] - 1 * k,
+                              rotate[1]
+                            ])
+                            path = d3.geoPath().projection(projection)
+                            svg.selectAll("path").attr("d", path)
+                        },200)
                 } catch (error) {
                     console.error('Error fetching GeoJSON:', error);
-                }
+                };
             };
             
             fetchData(); // Invoke the fetchData function to fetch the data
         }, [windowSize]);
 
-        return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
+        return <svg ref={svgRef} width={Math.min(windowSize.width, 600)} height={Math.min(windowSize.width, 600)} />;
     };
 
     // Returning the JSX element, which displays a search input and submit button.
