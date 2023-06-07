@@ -42,6 +42,29 @@ export default function Hero (props: Props): JSX.Element {
                 try {
                     const response = await fetch('/world.json');
                     const geojson = await response.json();
+
+                    // Generate random points on the sphere
+                    const numPoints = 10;
+                    const randomPoints = [];
+
+                    for (let i = 0; i < numPoints; i++) {
+                    const randomLongitude = Math.random() * 360 - 180;
+                    const randomLatitude = Math.random() * 180 - 90;
+
+                    randomPoints.push({
+                        type: "Feature",
+                        properties: {
+                            name: "Random Point " + i
+                        },
+                        geometry: {
+                            type: "Point",
+                            coordinates: [randomLongitude, randomLatitude]
+                        }
+                    });
+                    }
+
+                    // Append randomPoints to geojson
+                    geojson.features = geojson.features.concat(randomPoints);
             
                     // Select the SVG element and remove any existing elements.
                     const svg = d3.select(svgRef.current);
@@ -80,22 +103,16 @@ export default function Hero (props: Props): JSX.Element {
                         .enter().append("path")
                         .attr("class", (d: any) => "country_" + d.properties.name.replace(" ","_"))
                         .attr("d", path)
-                        .attr("fill", "white")
+                        .style("fill", (d: any) => {
+                            if (d.geometry.type === "Point") {
+                              return "steelblue"; // Set the color for points
+                            } else {
+                              return "white"; // Set the color for other shapes
+                            }
+                          })
                         .style('stroke', 'black')
                         .style('stroke-width', 0.3)
                         .style("opacity",0.8)
-
-                    // Update the rotation of the globe and paths every 200 milliseconds.
-                    d3.timer(function() {
-                            const rotate = projection.rotate()
-                            const k = sensitivity / projection.scale()
-                            projection.rotate([
-                              rotate[0] - 1 * k,
-                              rotate[1]
-                            ])
-                            path = d3.geoPath().projection(projection)
-                            svg.selectAll("path").attr("d", path)
-                        },200)
 
                     // Generate the latitude and longitude lines using d3.geoGraticule().
                     const graticuleGenerator = d3.geoGraticule();
@@ -108,6 +125,18 @@ export default function Hero (props: Props): JSX.Element {
                         .style("fill", "none")
                         .style("stroke", "#ccc")
                         .style("stroke-width", 0.4);
+
+                    // Update the rotation of the globe and paths every 200 milliseconds.
+                    d3.timer(function() {
+                        const rotate = projection.rotate()
+                        const k = sensitivity / projection.scale()
+                        projection.rotate([
+                          rotate[0] - 1 * k,
+                          rotate[1]
+                        ])
+                        path = d3.geoPath().projection(projection)
+                        svg.selectAll("path").attr("d", path)
+                    },200)
                 } catch (error) {
                     console.error('Error fetching GeoJSON:', error);
                 };
