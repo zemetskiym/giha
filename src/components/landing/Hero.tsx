@@ -38,16 +38,23 @@ export default function Hero (props: Props): JSX.Element {
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
-            // Select the SVG element using D3.js.
-            const svg = d3.select(svgRef.current);
-
-            // Clear the SVG by removing all existing elements.
-            svg.selectAll('*').remove();
-
-            // Define the height, width, and sensitivity of the SVG element.
-            const height = Math.min(windowSize.width / 2, 600);
-            const width = Math.min(windowSize.width / 2, 600);
-            const sensitivity = 75;
+            const fetchData = async () => {
+                try {
+                    const response = await fetch('/world.json');
+                    const geojson = await response.json();
+            
+                    const svg = d3.select(svgRef.current);
+                    svg.selectAll('*').remove();
+            
+                    const height = Math.min(windowSize.width / 2, 600);
+                    const width = Math.min(windowSize.width / 2, 600);
+                    const sensitivity = 75;
+                } catch (error) {
+                    console.error('Error fetching GeoJSON:', error);
+                }
+            };
+            
+            fetchData(); // Invoke the fetchData function to fetch the data
         }, [windowSize]);
 
         return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
