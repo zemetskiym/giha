@@ -43,13 +43,16 @@ export default function Hero (props: Props): JSX.Element {
                     const response = await fetch('/world.json');
                     const geojson = await response.json();
             
+                    // Select the SVG element and remove any existing elements.
                     const svg = d3.select(svgRef.current);
                     svg.selectAll('*').remove();
             
+                    // Set the height and width of the SVG.
                     const height = Math.min(windowSize.width, 600);
                     const width = Math.min(windowSize.width, 600);
                     const sensitivity = 75;
 
+                    // Define the projection for the globe.
                     let projection = d3.geoOrthographic()
                         .scale(250)
                         .center([0, 0])
@@ -58,6 +61,7 @@ export default function Hero (props: Props): JSX.Element {
 
                     let path: any = d3.geoPath().projection(projection);
 
+                    // Append a circle representing the globe to the SVG.
                     let globe = svg.append("circle")
                         .attr("fill", "#EEE")
                         .attr("stroke", "#000")
@@ -68,6 +72,7 @@ export default function Hero (props: Props): JSX.Element {
 
                     let map = svg.append("g")
 
+                    // Append the country paths to the map.
                     map.append("g")
                         .attr("class", "countries" )
                         .selectAll("path")
@@ -80,6 +85,7 @@ export default function Hero (props: Props): JSX.Element {
                         .style('stroke-width', 0.3)
                         .style("opacity",0.8)
 
+                    // Update the rotation of the globe and paths every 200 milliseconds.
                     d3.timer(function() {
                             const rotate = projection.rotate()
                             const k = sensitivity / projection.scale()
@@ -90,6 +96,18 @@ export default function Hero (props: Props): JSX.Element {
                             path = d3.geoPath().projection(projection)
                             svg.selectAll("path").attr("d", path)
                         },200)
+
+                    // Generate the latitude and longitude lines using d3.geoGraticule().
+                    const graticuleGenerator = d3.geoGraticule();
+
+                    // Append the graticule path to the map.
+                    map.append("path")
+                        .datum(graticuleGenerator)
+                        .attr("class", "graticule")
+                        .attr("d", path)
+                        .style("fill", "none")
+                        .style("stroke", "#ccc")
+                        .style("stroke-width", 0.4);
                 } catch (error) {
                     console.error('Error fetching GeoJSON:', error);
                 };
