@@ -114,7 +114,7 @@ export default function Languages(props: Props): JSX.Element {
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function CumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
-        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1
+        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1
 
         // Create a reference to the SVG element that will be rendered.
         const svgRef = useRef<SVGSVGElement>(null);
