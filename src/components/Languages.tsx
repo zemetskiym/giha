@@ -101,7 +101,13 @@ export default function Languages(props: Props): JSX.Element {
     useEffect(() => {
         // Loop through each commit in commitData and extract the language of the first file
         for(let i = 0; i < commitData.length; i++) {
-            if (commitData[i] != null) findCommitStats(commitData[i] as Commit)
+            if (
+                commitData[i] &&
+                commitData[i]!.files != null &&
+                commitData[i]!.files.length > 0 &&
+                commitData[i]!.files[0].patch != null
+            ) {findCommitStats(commitData[i] as Commit);}
+            else {setResults(prevResults => [...prevResults, null])}
         }
     }, [])
 

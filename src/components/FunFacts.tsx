@@ -56,6 +56,11 @@ export default function Commits(props: Props): JSX.Element {
         for (let commit of filteredCommitData) {
             const patch = commit.files[0].patch;
 
+            // Skip to the next iteration if patch is undefined
+            if (typeof patch === "undefined") {
+                continue;
+            }
+
             // Count matches for each convention
             for (let convention in regexes) {
                 count[convention as Convention] += countMatches(regexes[convention as Convention], patch);
@@ -82,7 +87,10 @@ export default function Commits(props: Props): JSX.Element {
     function findAvgLOC(filteredCommitData: Array<Commit>): number {
         let sum = 0;
         for (let commit of filteredCommitData) {
-            sum += commit.files[0].patch.split("\n").length;
+            // Checking if commit has files, at least one file, and patch is a string
+            if (commit.files && commit.files.length > 0 && typeof commit.files[0].patch === "string") {
+                sum += commit.files[0].patch.split("\n").length;
+            }
         };
         return sum / filteredCommitData.length;
     };
@@ -265,7 +273,12 @@ export default function Commits(props: Props): JSX.Element {
       
         // Iterate over the commits
         for (let commit in filteredCommitData) {
-            const number = filteredCommitData[commit].files[0].patch.split("\n").length;
+            let number: number;
+            try {
+                number = filteredCommitData[commit].files[0].patch.split("\n").length;
+            } catch (error) {
+                continue; // Skip to the next iteration if there was an error
+            }
             // Iterate over the ranges to find the matching range for the given number
             for (const rangeObj of ranges) {
                 // Check if the number falls within the min and max values of the range
