@@ -49,14 +49,15 @@ export default function Hero (props: Props): JSX.Element {
 
                     for (let i = 0; i < numPoints; i++) {
                         let pointFound = false;
-                        let randomLongitude: number, randomLatitude: number;
+                        let randomLongitude: number = 0;
+                        let randomLatitude: number = 0;
                       
                         while (!pointFound) {
                           randomLongitude = Math.random() * 360 - 180;
                           randomLatitude = Math.random() * 180 - 90;
                       
                           // Check if the random point falls within any country polygon
-                          const isInsideCountry = geojson.features.some((feature) => {
+                          const isInsideCountry: boolean = geojson.features.some((feature: GeoJSON.Feature ) => {
                             if (feature.geometry.type === "Polygon") {
                               return d3.geoContains(feature, [randomLongitude, randomLatitude]);
                             }
@@ -68,16 +69,16 @@ export default function Hero (props: Props): JSX.Element {
                           }
                         }
 
-                    randomPoints.push({
-                        type: "Feature",
-                        properties: {
-                            name: "Random Point " + i
-                        },
-                        geometry: {
-                            type: "Point",
-                            coordinates: [randomLongitude, randomLatitude]
-                        }
-                    });
+                        randomPoints.push({
+                            type: "Feature",
+                            properties: {
+                                name: "Random Point " + i
+                            },
+                            geometry: {
+                                type: "Point",
+                                coordinates: [randomLongitude, randomLatitude]
+                            }
+                        });
                     }
 
                     // Append randomPoints to geojson
