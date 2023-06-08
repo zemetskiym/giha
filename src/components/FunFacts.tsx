@@ -2,6 +2,7 @@ import styles from "../styles/components/FunFacts.module.css";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useWindowSizeContext } from '@/components/context';
+import Image from "next/image";
 
 // Define types/interfaces
 interface Parent {
@@ -31,6 +32,10 @@ export default function Commits(props: Props): JSX.Element {
     // Destructure the props object
     const {commitData = []} = props;
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>;
+
+    // Create a reference to the SVG elements that will be rendered.
+    const timeOfWeekSvgRef = useRef<SVGSVGElement>(null);
+    const LOCSvgRef = useRef<SVGSVGElement>(null);
 
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
 
@@ -146,12 +151,9 @@ export default function Commits(props: Props): JSX.Element {
         // Check if the required data is available.
         const hasData = filteredCommitData.length > 0;
 
-        // Create a reference to the SVG element that will be rendered.
-        const svgRef = useRef<SVGSVGElement>(null);
-
         useEffect(() => {
             // Select the SVG element using D3.js.
-            const svg = d3.select(svgRef.current);
+            const svg = d3.select(timeOfWeekSvgRef.current);
 
             // Clear the SVG by removing all existing elements.
             svg.selectAll('*').remove();
@@ -245,12 +247,12 @@ export default function Commits(props: Props): JSX.Element {
                 svg.selectAll("text")
                     .style("font-size", `${12 / baseFontSize}rem`);
             };
-        }, [svgRef, windowSize]);
+        }, [timeOfWeekSvgRef, windowSize]);
 
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
+        return <svg ref={timeOfWeekSvgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
     }
 
     function findRange(filteredCommitData: Array<Commit>) {
@@ -290,12 +292,9 @@ export default function Commits(props: Props): JSX.Element {
         // Check if the required data is available.
         const hasData = filteredCommitData.length > 0;
 
-        // Create a reference to the SVG element that will be rendered.
-        const svgRef = useRef<SVGSVGElement>(null);
-
         useEffect(() => {
             // Select the SVG element using D3.js.
-            const svg = d3.select(svgRef.current);
+            const svg = d3.select(LOCSvgRef.current);
 
             // Clear the SVG by removing all existing elements.
             svg.selectAll('*').remove();
@@ -388,12 +387,39 @@ export default function Commits(props: Props): JSX.Element {
                 svg.selectAll("text")
                     .style("font-size", `${12 / baseFontSize}rem`);
             };
-        }, [svgRef, windowSize])
+        }, [LOCSvgRef, windowSize])
 
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={svgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />
+        return <svg ref={LOCSvgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />
+    }
+
+    function handleDownload(svgRef: React.RefObject<SVGSVGElement>) {
+        // Get the SVG element
+        const svgElement = svgRef.current;
+
+        if (svgElement != null) {
+            // Convert the SVG element to a Blob
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: "image/svg+xml" });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary link element and click it programmatically to trigger the download
+            const link = document.createElement("a");
+            link.href = url;
+            if (svgRef == timeOfWeekSvgRef) {
+                link.download = "commits-over-day-of-week.svg";
+            } else if (svgRef == LOCSvgRef)  {
+                link.download = "commits-over-LOC.svg";
+            }
+            link.click();
+
+            // Clean up the URL and remove the temporary link element
+            URL.revokeObjectURL(url);
+        }
     }
 
     return (
@@ -403,8 +429,22 @@ export default function Commits(props: Props): JSX.Element {
             <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
             <div>My most productive days are {findMostProductiveDayOfWeek(filteredCommitData) as string}s</div>
             <div>I commit my code in {findMostProductiveTimeOfDay(filteredCommitData)}s</div>
-            <span>{TimeOfWeekLineGraph()}</span>
-            <span>{LOCBarChart()}</span>
+            <span>
+                <div>
+                    <Image src="/icons/download.svg" onClick={() => handleDownload(timeOfWeekSvgRef)} height={20} width={20} alt="Download" />
+                </div>
+                <div>
+                    {TimeOfWeekLineGraph()}
+                </div>
+            </span>
+            <span>
+                <div>
+                    <Image src="/icons/download.svg" onClick={() => handleDownload(LOCSvgRef)} height={20} width={20} alt="Download" />
+                </div>
+                <div>
+                    {LOCBarChart()}
+                </div>
+            </span>
         </>
     );
 };
