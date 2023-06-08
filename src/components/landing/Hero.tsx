@@ -90,7 +90,7 @@ export default function Hero (props: Props): JSX.Element {
             
                     // Set the height and width of the SVG.
                     const height = Math.min(windowSize.width, 600);
-                    const width = Math.min(windowSize.width, 600);
+                    const width = windowSize.width;
                     const sensitivity = 75;
 
                     // Define the projection for the globe.
@@ -169,12 +169,16 @@ export default function Hero (props: Props): JSX.Element {
             fetchData(); // Invoke the fetchData function to fetch the data
         }, [windowSize]);
 
-        return <svg ref={svgRef} width={Math.min(windowSize.width, 600)} height={Math.min(windowSize.width, 600)} />;
+        return <svg ref={svgRef} width={windowSize.width} height={Math.min(windowSize.width, 600)} />;
     };
 
     // Returning the JSX element, which displays a search input and submit button.
     return (
         <section>
+            <div>
+                <h1>Unlock the Coding Universe on GitHub</h1>
+                <p>Analyze user profiles, track coding patterns, and explore global collaboration</p>
+            </div>
             <div>
                 {RenderGlobe()}
             </div>
