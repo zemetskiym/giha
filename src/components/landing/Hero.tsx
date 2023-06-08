@@ -48,8 +48,25 @@ export default function Hero (props: Props): JSX.Element {
                     const randomPoints = [];
 
                     for (let i = 0; i < numPoints; i++) {
-                    const randomLongitude = Math.random() * 360 - 180;
-                    const randomLatitude = Math.random() * 180 - 90;
+                        let pointFound = false;
+                        let randomLongitude: number, randomLatitude: number;
+                      
+                        while (!pointFound) {
+                          randomLongitude = Math.random() * 360 - 180;
+                          randomLatitude = Math.random() * 180 - 90;
+                      
+                          // Check if the random point falls within any country polygon
+                          const isInsideCountry = geojson.features.some((feature) => {
+                            if (feature.geometry.type === "Polygon") {
+                              return d3.geoContains(feature, [randomLongitude, randomLatitude]);
+                            }
+                            return false;
+                          });
+                      
+                          if (isInsideCountry) {
+                            pointFound = true;
+                          }
+                        }
 
                     randomPoints.push({
                         type: "Feature",
@@ -103,15 +120,21 @@ export default function Hero (props: Props): JSX.Element {
                         .enter().append("path")
                         .attr("class", (d: any) => "country_" + d.properties.name.replace(" ","_"))
                         .attr("d", path)
-                        .style("fill", (d: any) => {
+                        .style("fill", "white")
+                        .style("stroke", (d: any) => {
                             if (d.geometry.type === "Point") {
                               return "steelblue"; // Set the color for points
                             } else {
-                              return "white"; // Set the color for other shapes
+                              return "black"; // Set the color for other shapes
                             }
                           })
-                        .style('stroke', 'black')
-                        .style('stroke-width', 0.3)
+                        .style("stroke-width", (d: any) => {
+                            if (d.geometry.type === "Point") {
+                              return 3; // Set the color for points
+                            } else {
+                              return 0.3; // Set the color for other shapes
+                            }
+                          })
                         .style("opacity",0.8)
 
                     // Generate the latitude and longitude lines using d3.geoGraticule().
