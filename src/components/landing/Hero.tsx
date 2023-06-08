@@ -2,6 +2,7 @@ import styles from "@/styles/components/landing/Hero.module.css"
 import { useWindowSizeContext } from '@/components/context';
 import { useRef, useEffect } from "react";
 import * as d3 from "d3";
+import Image from "next/image";
 
 // Defining the Search interface.
 interface Search {
@@ -176,8 +177,11 @@ export default function Hero (props: Props): JSX.Element {
     return (
         <section>
             <div>
-                <h1>Unlock the Coding Universe on GitHub</h1>
-                <p>Analyze user profiles, track coding patterns, and explore global collaboration</p>
+                <Image src="/icons/unlock.svg" width={40} height={40} alt="" />
+                <div>
+                    <h1>Unlock the Coding Universe on GitHub</h1>
+                    <h2>Analyze user profiles, track coding patterns, and explore global collaboration</h2>
+                </div>
             </div>
             <div>
                 {RenderGlobe()}
