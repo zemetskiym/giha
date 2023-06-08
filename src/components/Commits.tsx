@@ -84,23 +84,38 @@ export default function Commits(props: Props): JSX.Element {
                 // Clear the SVG by removing all existing elements.
                 svg.selectAll('*').remove();
 
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
                 // Create a lanugage set to store unique "repo" values.
                 const repoSet: Set<string> = new Set();
-                resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)});
+                if (windowSize.width < 400) {
+                    resultsWithoutNull.map((commit) => {repoSet.add(commit.repo.split("/")[1])});
+                } else {
+                    resultsWithoutNull.map((commit) => {repoSet.add(commit.repo)});
+                };
 
                 // Find the string of the longest repository name.
                 let longestRepoName = "";
                 repoSet.forEach(function(string) {
                     if (string.length > longestRepoName.length) {
                         longestRepoName = string;
-                    }
+                    };
                 });
 
                 // Generate a temporary text element in the DOM.
-                const temporaryTextElement = svg.append("text")
+                let temporaryTextElement;
+                if (windowSize.width < 400) {
+                    temporaryTextElement = svg.append("text")
                     .text(longestRepoName)
-                    .style("font-size", "12px")
+                    .style("font-size", `${10 / baseFontSize}rem`)
                     .style("font-family", "Arial");
+                } else {
+                    temporaryTextElement = svg.append("text")
+                    .text(longestRepoName)
+                    .style("font-size", `${10 / baseFontSize}rem`)
+                    .style("font-family", "Arial");
+                };
 
                 // Calculate the longest repo width based on the computed text
                 const longestRepoWidth = temporaryTextElement.node()?.getComputedTextLength();
@@ -159,7 +174,7 @@ export default function Commits(props: Props): JSX.Element {
                     svg.append('g')
                     .attr('transform', `translate(0,${height - margin.bottom})`)
                     .call(xAxis);
-                }  
+                };
 
                 // Add the y-axis to the chart.
                 svg.append('g').attr('transform', `translate(${margin.left},0)`).call(yAxis);
@@ -173,18 +188,23 @@ export default function Commits(props: Props): JSX.Element {
                     .data(resultsWithoutNull)
                     .join("rect")
                         .attr("x", d => x(d.date) - 0.75)
-                        .attr("y", d => y(d.repo)!)
+                        .attr("y", d => {
+                            if (windowSize.width < 400) return y(d.repo.split("/")[1])!
+                            else return y(d.repo)!
+                        })
                         .attr("width", 1.5)
                         .attr("height", y.bandwidth())
                     .append("title")
                         .text(d => `${d.date.toDateString()} ${d.repo}`);
 
-                // Set the base font size.
-                const baseFontSize = 16; // in pixels
-
                 // Set text font size.
-                svg.selectAll("text")
-                    .style("font-size", `${12 / baseFontSize}rem`);
+                if (windowSize.width < 400) {
+                    svg.selectAll("text")
+                        .style("font-size", `${10 / baseFontSize}rem`);
+                } else {
+                    svg.selectAll("text")
+                        .style("font-size", `${12 / baseFontSize}rem`);
+                };
             }
             
         }, [results, svgRef, windowSize]);

@@ -238,8 +238,13 @@ export default function Commits(props: Props): JSX.Element {
             const baseFontSize = 16; // in pixels
 
             // Set text font size.
-            svg.selectAll("text")
-            .style("font-size", `${12 / baseFontSize}rem`);
+            if (windowSize.width < 400) {
+                svg.selectAll("text")
+                    .style("font-size", `${10 / baseFontSize}rem`);
+            } else {
+                svg.selectAll("text")
+                    .style("font-size", `${12 / baseFontSize}rem`);
+            };
         }, [svgRef, windowSize]);
 
         if (!hasData) {
@@ -376,8 +381,13 @@ export default function Commits(props: Props): JSX.Element {
             const baseFontSize = 16; // in pixels
 
             // Set text font size.
-            svg.selectAll("text")
-                .style("font-size", `${12 / baseFontSize}rem`);
+            if (windowSize.width < 400) {
+                svg.selectAll("text")
+                    .style("font-size", `${10 / baseFontSize}rem`);
+            } else {
+                svg.selectAll("text")
+                    .style("font-size", `${12 / baseFontSize}rem`);
+            };
         }, [svgRef, windowSize])
 
         if (!hasData) {

@@ -223,9 +223,17 @@ export default function Languages(props: Props): JSX.Element {
                     .append("title")
                         .text(d => d.key);
 
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
                 // Set text font size.
-                svg.selectAll("text")
-                    .style("font-size", "12px")
+                if (windowSize.width < 400) {
+                    svg.selectAll("text")
+                        .style("font-size", `${10 / baseFontSize}rem`);
+                } else {
+                    svg.selectAll("text")
+                        .style("font-size", `${12 / baseFontSize}rem`);
+                };
             }
         }, [results, svgRef, windowSize]);
 
