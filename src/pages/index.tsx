@@ -134,7 +134,7 @@ export default function Index() {
       setError(`Unknown error code: ${eventResponse.status}.`)
     }
 
-    if (eventData != null) {
+    if (eventData != null && eventData.length > 0) {
       eventData.forEach((event: Partial<Event>) => {
         // Call async fetchCommit function because async operations are not allowed in forEach loops
         if (event.payload!.commits != undefined) {
