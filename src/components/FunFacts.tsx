@@ -34,6 +34,16 @@ export default function Commits(props: Props): JSX.Element {
 
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
 
+    // Function to find the object with the highest value property
+    function findMaxProperty (object: object): {prop: string, value: number} {
+        return Object.entries(object).reduce((prev, [prop, value]) => {
+            if (value > prev.value) {
+              return { prop, value };
+            }
+            return prev;
+        }, { prop: '', value: -Infinity });
+    }
+
     // Function to count the occurrences of programming conventions
     function countProgrammingConventions(filteredCommitData: Array<Commit>): string {
         // Initialize count object
@@ -68,18 +78,13 @@ export default function Commits(props: Props): JSX.Element {
         };
 
         // Find the convention with the highest count
-        const maxProperty = Object.entries(count).reduce((prev, [prop, value]) => {
-            if (value > prev.value) {
-              return { prop, value };
-            }
-            return prev;
-        }, { prop: '', value: -Infinity });
+        const highestCount = findMaxProperty(count).prop
         
         // Return the most-used programming convention
-        if (maxProperty.prop == "camelCase") return "camelCase";
-        if (maxProperty.prop == "snakeCase") return "snake_case";
-        if (maxProperty.prop == "pascalCase") return "PascalCase";
-        if (maxProperty.prop == "kebabCase") return "kebab-case";
+        if (highestCount == "camelCase") return "camelCase";
+        if (highestCount == "snakeCase") return "snake_case";
+        if (highestCount == "pascalCase") return "PascalCase";
+        if (highestCount == "kebabCase") return "kebab-case";
         return "camelCase"; // Default convention
     };
 
@@ -112,17 +117,9 @@ export default function Commits(props: Props): JSX.Element {
         };
 
         if (returnType === ReturnType.Count) return count;
-
-        // Find the day with the most commits
-        const maxProperty = Object.entries(count).reduce((prev, [prop, value]) => {
-            if (value > prev.value) {
-              return { prop, value };
-            };
-            return prev;
-        }, { prop: '', value: -Infinity });
         
         // Return the most productive day of the week
-        return maxProperty.prop;
+        return findMaxProperty(count).prop;
     };
 
     // Function to find the most productive time of day
@@ -139,17 +136,9 @@ export default function Commits(props: Props): JSX.Element {
             else if (hour < 20) count.evening += 1;
             else count.night += 1;
         };
-
-        // Find the most productive time of day
-        const maxProperty = Object.entries(count).reduce((prev, [prop, value]) => {
-            if (value > prev.value) {
-              return { prop, value };
-            };
-            return prev;
-        }, { prop: '', value: -Infinity });
         
         // Return the most productive time of day
-        return maxProperty.prop;
+        return findMaxProperty(count).prop;
     };
 
     // D3.js line graph for the number of commits over the time of week
