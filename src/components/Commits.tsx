@@ -2,6 +2,7 @@ import styles from "../styles/components/Commits.module.css"
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 import { useWindowSizeContext } from '@/components/context';
+import Image from "next/image";
 
 // Define types/interfaces
 interface Parent {
@@ -35,6 +36,9 @@ export default function Commits(props: Props): JSX.Element {
     // Declare an empty array to store results
     const [results, setResults] = useState<Array<any>>([]);
 
+    // Create a reference to the SVG element that will be rendered.
+    const svgRef = useRef<SVGSVGElement>(null);
+
     // This function takes a Commit object as input and returns an object with repository name and commit date.
     function commitDateAndRepo (object: Commit): object | null {
         // Extract the URL of the parent commit from the Commit object.
@@ -65,12 +69,32 @@ export default function Commits(props: Props): JSX.Element {
         }
     }, [])
 
+    function handleDownload() {
+        // Get the SVG element
+        const svgElement = svgRef.current;
+
+        if (svgElement != null) {
+            // Convert the SVG element to a Blob
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: "image/svg+xml" });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary link element and click it programmatically to trigger the download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "repository-commits-over-time.svg";
+            link.click();
+
+            // Clean up the URL and remove the temporary link element
+            URL.revokeObjectURL(url);
+        }
+    }
+
     function BarcodePlot(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1;
-
-        // Create a reference to the SVG element that will be rendered.
-        const svgRef = useRef<SVGSVGElement>(null);
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
@@ -222,7 +246,10 @@ export default function Commits(props: Props): JSX.Element {
     // Return the component JSX
     return (
         <>
-            <h1>Commits</h1>
+            <div>
+                <h1>Commits</h1>
+                <Image src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
+            </div>
             <>
                 {BarcodePlot()}
             </>
