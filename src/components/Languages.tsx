@@ -5,6 +5,7 @@ import hljs from 'highlight.js'
 import { languageColors } from "../../public/languageColors";
 import * as d3 from "d3";
 import { useWindowSizeContext } from '@/components/context';
+import Image from "next/image";
 
 // Define types/interfaces
 interface File {
@@ -33,7 +34,10 @@ export default function Languages(props: Props): JSX.Element {
     const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
 
     // Declare an empty array to store results
-    const [results, setResults] = useState<Array<any>>([])
+    const [results, setResults] = useState<Array<any>>([]);
+
+    // Create a reference to the SVG element that will be rendered.
+    const svgRef = useRef<SVGSVGElement>(null);
 
     // Define a helper function cleanUpDiff to remove unnecessary characters from a string
     function cleanUpDiff(diff: string) {
@@ -111,13 +115,33 @@ export default function Languages(props: Props): JSX.Element {
         }
     }, [])
 
+    function handleDownload() {
+        // Get the SVG element
+        const svgElement = svgRef.current;
+
+        if (svgElement != null) {
+            // Convert the SVG element to a Blob
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: "image/svg+xml" });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary link element and click it programmatically to trigger the download
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "commit-languages-over-time.svg";
+            link.click();
+
+            // Clean up the URL and remove the temporary link element
+            URL.revokeObjectURL(url);
+        }
+    }
+
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function CumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
         const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1
-
-        // Create a reference to the SVG element that will be rendered.
-        const svgRef = useRef<SVGSVGElement>(null);
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
@@ -246,7 +270,10 @@ export default function Languages(props: Props): JSX.Element {
     // Return the component JSX
     return (
         <>
-            <h1>Languages</h1>
+            <div>
+                <h1>Languages</h1>
+                <Image src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
+            </div>
             <>
                 {CumulativeStackedAreaChart()}
             </>
