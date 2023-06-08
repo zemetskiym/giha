@@ -137,7 +137,7 @@ export default function Commits(props: Props): JSX.Element {
                 } else {
                     temporaryTextElement = svg.append("text")
                     .text(longestRepoName)
-                    .style("font-size", `${10 / baseFontSize}rem`)
+                    .style("font-size", `${12 / baseFontSize}rem`)
                     .style("font-family", "Arial");
                 };
 
