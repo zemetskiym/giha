@@ -37,7 +37,11 @@ export default function Languages(props: Props): JSX.Element {
     const [results, setResults] = useState<Array<any>>([]);
 
     // Create a reference to the SVG element that will be rendered.
-    const svgRef = useRef<SVGSVGElement>(null);
+    const areaChartSvgRef = useRef<SVGSVGElement>(null);
+    const pieChartSvgRef = useRef<SVGSVGElement>(null);
+
+    // Create React state to hold the current chart
+    const [currentChart, setCurrentChart] = useState<string>("CumulativeStackedAreaChart");
 
     // Define a helper function cleanUpDiff to remove unnecessary characters from a string
     function cleanUpDiff(diff: string) {
@@ -115,7 +119,7 @@ export default function Languages(props: Props): JSX.Element {
         }
     }, [])
 
-    function handleDownload() {
+    function handleDownload(svgRef: React.RefObject<SVGSVGElement>) {
         // Get the SVG element
         const svgElement = svgRef.current;
 
@@ -141,7 +145,7 @@ export default function Languages(props: Props): JSX.Element {
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function CumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
-        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1
+        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1;
 
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
@@ -151,7 +155,7 @@ export default function Languages(props: Props): JSX.Element {
                 const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
                 
                 // Select the SVG element using D3.js.
-                const svg = d3.select(svgRef.current);
+                const svg = d3.select(areaChartSvgRef.current);
 
                 // Clear the SVG by removing all existing elements.
                 svg.selectAll('*').remove();
@@ -259,10 +263,149 @@ export default function Languages(props: Props): JSX.Element {
                         .style("font-size", `${12 / baseFontSize}rem`);
                 };
             }
-        }, [results, svgRef, windowSize]);
+        }, [results, areaChartSvgRef, windowSize]);
 
         // Return the SVG element with the specified dimensions.
-        if (hasData) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={Math.min(windowSize.width / 2, 600)} />;
+        if (hasData) return <svg ref={areaChartSvgRef} width={Math.min(windowSize.width, 1200)} height={Math.min(windowSize.width / 2, 600)} />;
+        if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
+        return <p>There is not enough data available to visualize the chart. Please try again later.</p>
+    }
+
+    // Define a function that creates a cumulative stacked area chart using D3.js.
+    function PieChart(): JSX.Element {
+        // Check if the required data is available.
+        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1;
+
+        // Use the useEffect hook to execute code after the component is mounted or updated.
+        useEffect(() => {
+            // Check if the SVG element and the required data are available.
+            if (hasData) {
+                // Remove any null values from the results array.
+                const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+
+                // Create a lanugage set to store unique "language" values
+                const languageSet: Set<string> = new Set();
+                resultsWithoutNull.map((commit) => {languageSet.add(commit.language)});
+
+                // Create a pie chart data array.
+                const pieChartData: Array<{name: string, value: number, color: string}> = Array.from(languageSet).map((language: string) => {
+                    let color: string = "";
+                    const count = resultsWithoutNull.reduce((acc, obj) => {
+                      if (obj.language === language) {
+                        color = obj.color;
+                        return acc + 1;
+                      }
+                      return acc;
+                    }, 0);
+                    
+                    return { name: language, value: count, color: color };
+                });
+                
+                // Select the SVG element using D3.js.
+                const svg = d3.select(pieChartSvgRef.current);
+
+                // Clear the SVG by removing all existing elements.
+                svg.selectAll('*').remove();
+
+                // Define the dimensions of the chart and its margins.
+                const height = Math.min(windowSize.width / 2, 600);
+                const width = Math.min(windowSize.width, 1200);
+                const margin = {top: 10, right: 20, bottom: 42, left: 30};
+
+                // Define the radius of the chart.
+                const padAngle = 0.005;
+                const innerRadius = 0;
+                const outerRadius = Math.min(width, height) / 2;
+                const labelRadius = (innerRadius * 0.2 + outerRadius * 0.8);
+                const radius = Math.min(width, height) / 2;
+
+                interface MyArcData {
+                    startAngle: number;
+                    endAngle: number;
+                    padAngle: number;
+                    innerRadius: number;
+                    outerRadius: number;
+                }
+
+                // Define the arc generator.
+                const arc = d3.arc<MyArcData>()
+                    .innerRadius(0)
+                    .outerRadius(radius - 1);
+
+                // Define the pie generator.
+                const pie = d3.pie<{ name: string; value: number; color: string }>()
+                    .padAngle(padAngle)
+                    .sort((a, b) => d3.descending(a.value, b.value))
+                    .value(d => d.value);
+
+                // Define the color scale.
+                const color = d3.scaleOrdinal<string>()
+                    .domain(pieChartData.map(d => d.name))
+                    .range(pieChartData.map(d => d.color));
+
+                // Add the chart to the SVG element.
+                svg.selectAll("path")
+                    .data(pie(pieChartData))
+                    .join("path")
+                        .attr("fill", d => color(d.data.name))
+                        .attr("d", d => arc({
+                            ...d,
+                            innerRadius: 0,
+                            outerRadius: radius - 1
+                        }))
+                    .attr("transform", `translate(${width / 2}, ${height / 2})`)
+                    .append("title")
+                        .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+                // Extract arc data from the pie generator.
+                function extractArcData(d: d3.PieArcDatum<{ name: string; value: number; color: string }>): MyArcData {
+                    return {
+                        startAngle: d.startAngle,
+                        endAngle: d.endAngle,
+                        padAngle: d.padAngle,
+                        innerRadius: 0,
+                        outerRadius: radius - 1
+                    };
+                }
+                
+                // Add the labels to the chart.
+                svg.append("g")
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", 12)
+                    .attr("text-anchor", "middle")
+                    .selectAll("text")
+                    .data(pie(pieChartData))
+                    .join("text")
+                    .attr("transform", d => {
+                        let [x, y] = arc.centroid(extractArcData(d))
+                        return `translate(${x + width / 2}, ${y + height / 2})`
+                    })
+                    .call(text => text.append("tspan")
+                        .attr("y", "-0.4em")
+                        .attr("font-weight", "bold")
+                        .text(d => d.data.name))
+                    .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
+                        .attr("x", 0)
+                        .attr("y", "0.7em")
+                        .attr("fill-opacity", 0.7)
+                        .text(d => d.data.value.toLocaleString()));
+
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
+                // Set text font size.
+                if (windowSize.width < 400) {
+                    svg.selectAll("text")
+                        .style("font-size", `${10 / baseFontSize}rem`);
+                } else {
+                    svg.selectAll("text")
+                        .style("font-size", `${12 / baseFontSize}rem`);
+                };
+            }
+        }, [results, pieChartSvgRef, windowSize]);
+
+        // Return the SVG element with the specified dimensions.
+        if (hasData) return <svg ref={pieChartSvgRef} width={Math.min(windowSize.width, 1200)} height={Math.min(windowSize.width / 2, 600)} />;
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
@@ -272,10 +415,21 @@ export default function Languages(props: Props): JSX.Element {
         <>
             <div>
                 <h1>Languages</h1>
-                <Image src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
+                <small>
+                    <button onClick={() => setCurrentChart("CumulativeStackedAreaChart")}>Area chart</button> 
+                    {" "}/{" "}
+                    <button onClick={() => setCurrentChart("PieChart")}>Pie chart</button>
+                </small>
+                <Image 
+                    src="/icons/download.svg" 
+                    onClick={() => {currentChart == "CumulativeStackedAreaChart" ? handleDownload(areaChartSvgRef) : handleDownload(pieChartSvgRef)}} 
+                    height={20} 
+                    width={20} 
+                    alt="Download" 
+                />
             </div>
             <>
-                {CumulativeStackedAreaChart()}
+                {currentChart == "CumulativeStackedAreaChart" ? CumulativeStackedAreaChart() : PieChart()}
             </>
         </>
     )
