@@ -327,10 +327,12 @@ export default function Languages(props: Props): JSX.Element {
                     outerRadius: number;
                 }
 
-                // Define the arc generator.
+                // Define the arc generators.
                 const arc = d3.arc<MyArcData>()
                     .innerRadius(0)
                     .outerRadius(radius - 1);
+
+                const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
                 // Define the pie generator.
                 const pie = d3.pie<{ name: string; value: number; color: string }>()
@@ -377,7 +379,7 @@ export default function Languages(props: Props): JSX.Element {
                     .data(pie(pieChartData))
                     .join("text")
                     .attr("transform", d => {
-                        let [x, y] = arc.centroid(extractArcData(d))
+                        let [x, y] = arcLabel.centroid(extractArcData(d))
                         return `translate(${x + width / 2}, ${y + height / 2})`
                     })
                     .call(text => text.append("tspan")
