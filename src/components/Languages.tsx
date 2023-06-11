@@ -343,7 +343,14 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the color scale.
                 const color = d3.scaleOrdinal<string>()
                     .domain(pieChartData.map(d => d.name))
-                    .range(pieChartData.map(d => d.color));
+                    .range(pieChartData.map(d => {
+                        const hexCode = d.color.replace('#', ''); // Remove the '#' if present
+                        const red = parseInt(hexCode.substring(0, 2), 16); // Extract the red value
+                        const green = parseInt(hexCode.substring(2, 4), 16); // Extract the green value
+                        const blue = parseInt(hexCode.substring(4, 6), 16); // Extract the blue value
+                    
+                        return `rgba(${red}, ${green}, ${blue}, 0.8)`;
+                      }));
 
                 // Add the chart to the SVG element.
                 svg.selectAll("path")
