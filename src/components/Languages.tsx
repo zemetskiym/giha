@@ -186,7 +186,9 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the y-axis with tick lines, guidelines, and no axis line.
                 const yAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
                     .attr("transform", `translate(${margin.left},0)`)
-                    .call(d3.axisLeft(y));
+                    .call(d3.axisLeft(y))
+                    .call(g => g.selectAll(".tick line").clone().attr("stroke-opacity", 0.1).attr("x2", width - margin.right - margin.left))
+                    .call(g => g.selectAll(".domain").remove());
 
                 // Create a lanugage set to store unique "language" values
                 const languageSet: Set<string> = new Set()
