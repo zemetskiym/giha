@@ -312,7 +312,10 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the dimensions of the chart and its margins.
                 const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
-                const margin = {top: 10, right: 20, bottom: 42, left: 30};
+
+                // Define the halo color and width.
+                const halo = "#fff";
+                const haloWidth = 3;
 
                 // Define the radius of the chart.
                 const padAngle = 0.005;
@@ -399,7 +402,11 @@ export default function Languages(props: Props): JSX.Element {
                         .attr("x", 0)
                         .attr("y", "0.7em")
                         .attr("fill-opacity", 0.7)
-                        .text(d => d.data.value.toLocaleString()));
+                        .text(d => d.data.value.toLocaleString()))
+                    .call(text => text.clone(true))
+                        .attr("fill", "none")
+                        .attr("stroke", halo)
+                        .attr("stroke-width", haloWidth);
 
                 // Set the base font size.
                 const baseFontSize = 16; // in pixels
