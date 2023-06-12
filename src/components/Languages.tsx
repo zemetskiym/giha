@@ -420,6 +420,17 @@ export default function Languages(props: Props): JSX.Element {
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
+
+    const legendData = results
+        .filter(item => item !== null)
+        .sort((a, b) => a.date - b.date)
+        .reduce((uniqueObjects, obj) => {
+        const existingObject = uniqueObjects.find((item: {language: string, color: string, date: Date}) => item.language === obj.language);
+        if (!existingObject) {
+            uniqueObjects.push(obj);
+        }
+        return uniqueObjects;
+    }, []);
     
     // Return the component JSX
     return (
@@ -438,6 +449,13 @@ export default function Languages(props: Props): JSX.Element {
                     width={20} 
                     alt="Download" 
                 />
+            </div>
+            <div>
+                {legendData.map((entry: {language: string, color: string, date: Date}) => (
+                    <span>
+                        <span style={{color: entry.color}}>●</span> {entry.language}
+                    </span>
+                ))}
             </div>
             <>
                 {currentChart == "CumulativeStackedAreaChart" ? CumulativeStackedAreaChart() : PieChart()}
