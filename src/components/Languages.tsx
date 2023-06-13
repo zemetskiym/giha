@@ -459,7 +459,7 @@ export default function Languages(props: Props): JSX.Element {
             </div>
             <div>
                 {legendData.map((entry: {language: string, color: string, date: Date}) => (
-                    <span>
+                    <span key={entry.language}>
                         <span style={{color: entry.color}}>●</span> {entry.language}
                     </span>
                 ))}
