@@ -134,7 +134,11 @@ export default function Languages(props: Props): JSX.Element {
             // Create a temporary link element and click it programmatically to trigger the download
             const link = document.createElement("a");
             link.href = url;
-            link.download = "commit-languages-over-time.svg";
+            if(svgRef == areaChartSvgRef) {
+                link.download = "commit-languages-area-chart.svg";
+            } else {
+                link.download = "commit-languages-pie-chart.svg";
+            }
             link.click();
 
             // Clean up the URL and remove the temporary link element
