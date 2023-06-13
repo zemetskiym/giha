@@ -313,15 +313,8 @@ export default function Languages(props: Props): JSX.Element {
                 const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
 
-                // Define the halo color and width.
-                const halo = "#fff";
-                const haloWidth = 3;
-
                 // Define the radius of the chart.
-                const padAngle = 0.005;
-                const innerRadius = 0;
-                const outerRadius = Math.min(width, height) / 2;
-                const labelRadius = (innerRadius * 0.2 + outerRadius * 0.8);
+                const padAngle = 0;
                 const radius = Math.min(width, height) / 2;
 
                 interface MyArcData {
@@ -336,8 +329,6 @@ export default function Languages(props: Props): JSX.Element {
                 const arc = d3.arc<MyArcData>()
                     .innerRadius(0)
                     .outerRadius(radius - 1);
-
-                const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
 
                 // Define the pie generator.
                 const pie = d3.pie<{ name: string; value: number; color: string }>()
@@ -370,55 +361,6 @@ export default function Languages(props: Props): JSX.Element {
                     .attr("transform", `translate(${width / 2}, ${height / 2})`)
                     .append("title")
                         .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
-
-                // Extract arc data from the pie generator.
-                function extractArcData(d: d3.PieArcDatum<{ name: string; value: number; color: string }>): MyArcData {
-                    return {
-                        startAngle: d.startAngle,
-                        endAngle: d.endAngle,
-                        padAngle: d.padAngle,
-                        innerRadius: 0,
-                        outerRadius: radius - 1
-                    };
-                }
-                
-                // Add the labels to the chart.
-                svg.append("g")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", 12)
-                    .attr("text-anchor", "middle")
-                    .selectAll("text")
-                    .data(pie(pieChartData))
-                    .join("text")
-                    .attr("transform", d => {
-                        let [x, y] = arcLabel.centroid(extractArcData(d))
-                        return `translate(${x + width / 2}, ${y + height / 2})`
-                    })
-                    .call(text => text.append("tspan")
-                        .attr("y", "-0.4em")
-                        .attr("font-weight", "bold")
-                        .text(d => d.data.name))
-                    .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-                        .attr("x", 0)
-                        .attr("y", "0.7em")
-                        .attr("fill-opacity", 0.7)
-                        .text(d => d.data.value.toLocaleString()))
-                    .call(text => text.clone(true))
-                        .attr("fill", "none")
-                        .attr("stroke", halo)
-                        .attr("stroke-width", haloWidth);
-
-                // Set the base font size.
-                const baseFontSize = 16; // in pixels
-
-                // Set text font size.
-                if (windowSize.width < 400) {
-                    svg.selectAll("text")
-                        .style("font-size", `${10 / baseFontSize}rem`);
-                } else {
-                    svg.selectAll("text")
-                        .style("font-size", `${12 / baseFontSize}rem`);
-                };
             }
         }, [results, pieChartSvgRef, windowSize]);
 
