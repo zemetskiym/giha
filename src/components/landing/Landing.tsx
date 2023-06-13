@@ -2,6 +2,7 @@
 import styles from "@/styles/components/landing/Landing.module.css"
 import { useState } from "react"
 import Hero from "./Hero"
+import Features from "./Features"
 
 // Defining the Search interface
 interface Search {
@@ -24,6 +25,7 @@ export default function Home (props: Props): JSX.Element {
     return (
         <header>
             <Hero {...props} />
+            <Features />
         </header>
     )
 }
