@@ -1,5 +1,6 @@
-import styles from "../../styles/components/landing/Features.module.css"
-import Image from "next/image"
+import styles from "../../styles/components/landing/Features.module.css";
+import Image from "next/image";
+import Link from 'next/link';
 
 export default function Features (): JSX.Element {
     return (
@@ -55,6 +56,11 @@ export default function Features (): JSX.Element {
                         <p>We believe in the power of collaboration and transparency. That's why our project is open source, allowing developers like you to explore, contribute, and enhance the tool's functionalities. Join our community and help us shape the future of Github profile analysis.</p>
                     </div>
                 </span>
+            </section>
+            <section>
+                <button>
+                    <Link target="_blank" href="https://github.com/zemetskiym/commits-analyzer">Explore the code</Link>
+                </button>
             </section>
         </>
     )
