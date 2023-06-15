@@ -7,7 +7,7 @@ import Languages from '@/components/Languages';
 import Commits from '@/components/Commits';
 import FunFacts from '@/components/FunFacts';
 import { useWindowSizeContext } from '@/components/context';
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 // Extend the SessionData interface from 'next-auth' to include the accessToken property
 declare module 'next-auth' {
