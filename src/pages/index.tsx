@@ -1,12 +1,20 @@
-import Head from 'next/head'
-import styles from '@/styles/Index.module.css'
-import { useState, useEffect } from 'react'
-import Home from "../components/landing/Landing"
-import Profile from "../components/Profile"
-import Languages from '@/components/Languages'
-import Commits from '@/components/Commits'
-import FunFacts from '@/components/FunFacts'
-import { useWindowSizeContext } from '@/components/context'
+import Head from 'next/head';
+import styles from '@/styles/Index.module.css';
+import { useState, useEffect } from 'react';
+import Home from "../components/landing/Landing";
+import Profile from "../components/Profile";
+import Languages from '@/components/Languages';
+import Commits from '@/components/Commits';
+import FunFacts from '@/components/FunFacts';
+import { useWindowSizeContext } from '@/components/context';
+import { useSession, signIn, signOut } from "next-auth/react";
+
+// Extend the SessionData interface from 'next-auth' to include the accessToken property
+declare module 'next-auth' {
+  interface Session {
+    accessToken?: string;
+  }
+}
 
 export default function Index() {
   // Define the structure of the search state
@@ -58,9 +66,22 @@ export default function Index() {
   const [error, setError] = useState<string | null>(null);
   const windowSize = useWindowSizeContext();
 
+  // Retrieving the user's NextAuth.js session data
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken;
+
   // Define an asynchronous function to fetch commit data from the Github API
   async function fetchCommit(owner: string, repo: string, sha: string) {
-    let commitResponse: Response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`)
+    let commitResponse: Response
+    if (session && accessToken) {
+      commitResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    } else {
+      commitResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${sha}`)
+    }
     let commitData: Commit = await commitResponse.json()
 
     // Handle different HTTP status codes
@@ -81,7 +102,16 @@ export default function Index() {
   // Define an asynchronous function to fetch user, repository, and event data from the GitHub API
   async function fetchData() {
     // Fetch user data
-    let userResponse: Response = await fetch(`https://api.github.com/users/${search.user}`)
+    let userResponse: Response
+    if (session && accessToken) {
+      userResponse = await fetch(`https://api.github.com/users/${search.user}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    } else {
+      userResponse = await fetch(`https://api.github.com/users/${search.user}`)
+    }
     let userData: object = await userResponse.json()
 
     // Handle different HTTP status codes
@@ -99,7 +129,16 @@ export default function Index() {
     }
 
     // Fetch repository data
-    let repoResponse: Response = await fetch(`https://api.github.com/users/${search.user}/repos?per_page=100`)
+    let repoResponse: Response
+    if (session && accessToken) {
+      repoResponse = await fetch(`https://api.github.com/users/${search.user}/repos?per_page=100`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    } else {
+      repoResponse = await fetch(`https://api.github.com/users/${search.user}/repos?per_page=100`)
+    }
     let repoData: Array<object> = await repoResponse.json()
 
     // Handle different HTTP status codes
@@ -117,7 +156,16 @@ export default function Index() {
     }
 
     // Fetch event data
-    let eventResponse: Response = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`)
+    let eventResponse: Response
+    if (session && accessToken) {
+      eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    } else {
+      eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`)
+    }
     let eventData: Array<object> = await eventResponse.json()
 
     // Handle different HTTP status codes
