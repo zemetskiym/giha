@@ -3,6 +3,8 @@ import { useWindowSizeContext } from '@/components/context';
 import { useRef, useEffect } from "react";
 import * as d3 from "d3";
 import Image from "next/image";
+import { useSession, signIn } from "next-auth/react";
+import { useState } from "react";
 
 // Defining the Search interface.
 interface Search {
@@ -25,6 +27,12 @@ export default function Hero (props: Props): JSX.Element {
 
     // Destructure the props object into React state.
     const { search, setSearch, numCommits, setNumCommits } = props;
+
+    // Set state for the authentication popup.
+    const [showPopup, setShowPopup] = useState(false);
+
+    // Retrieving the user's NextAuth.js session data
+    const { data: session } = useSession();
 
     // Defining a function to handle form submissions.
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -173,13 +181,22 @@ export default function Hero (props: Props): JSX.Element {
         return <svg ref={svgRef} width={windowSize.width} height={Math.min(windowSize.width, 600)} />;
     };
 
+    const AuthenticationPopup = () => (
+        <div onClick={() => setShowPopup(false)}>
+          <p>
+            Authenticating with GitHub allows you to increase your rate limit and perform a deeper analysis of your GitHub profile.
+            By connecting with GitHub, you'll have access to more commits and a richer analysis experience.
+          </p>
+        </div>
+    );
+
     // Returning the JSX element, which displays a search input and submit button.
     return (
         <section>
             <div>
                 <Image src="/icons/unlock.svg" width={40} height={40} alt="" />
                 <div>
-                    <h1>Unlock the Coding Universe on GitHub</h1>
+                    <h1>Unlock the coding universe on GitHub</h1>
                     <h2>Analyze user profiles, track coding patterns, and explore global collaboration</h2>
                 </div>
             </div>
@@ -187,18 +204,31 @@ export default function Hero (props: Props): JSX.Element {
                 {RenderGlobe()}
             </div>
             <form onSubmit={event => handleSubmit(event)}>
-                <input 
-                    type="text" 
-                    onChange={event => setSearch(({user: event.target.value, submit: false}))}
-                    value={search.user}
-                    placeholder="Search for user..."
-                />
-                <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
-                    <option value={3}>3 Commits</option>
-                    <option value={10}>10 Commits</option>
-                    <option value={20}>20 Commits</option>
-                </select>
-                <button>Submit</button>
+                <h2>Get started</h2>
+                {!session && 
+                    <div>
+                        {showPopup && <AuthenticationPopup />}
+                        <button type="button" onClick={() => signIn()}>
+                            <Image src="/icons/github.svg" width={20} height={20} alt="" />
+                            <span>Sign in with GitHub</span>
+                        </button>
+                        <button onClick={() => setShowPopup(prev => !prev)}>?</button>
+                    </div>
+                }
+                <div>
+                    <input 
+                        type="text" 
+                        onChange={event => setSearch(({user: event.target.value, submit: false}))}
+                        value={search.user}
+                        placeholder="Search for user..."
+                    />
+                    <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
+                        <option value={3}>3 Commits</option>
+                        <option value={10}>10 Commits</option>
+                        <option value={20}>20 Commits</option>
+                    </select>
+                    <button>Submit</button>
+                </div>
             </form>
         </section>
     )
