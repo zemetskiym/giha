@@ -33,6 +33,7 @@ export default function Hero (props: Props): JSX.Element {
 
     // Retrieving the user's NextAuth.js session data
     const { data: session } = useSession();
+    const accessToken = session?.accessToken;
 
     // Defining a function to handle form submissions.
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -223,9 +224,11 @@ export default function Hero (props: Props): JSX.Element {
                         placeholder="Search for user..."
                     />
                     <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
-                        <option value={3}>3 Commits</option>
-                        <option value={10}>10 Commits</option>
                         <option value={20}>20 Commits</option>
+                        <option value={40}>40 Commits</option>
+                        {session && accessToken && <option value={100}>100 Commits</option>}
+                        {session && accessToken && <option value={200}>200 Commits</option>}
+                        {session && accessToken && <option value={500}>500 Commits</option>}
                     </select>
                     <button>Submit</button>
                 </div>
