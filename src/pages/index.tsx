@@ -162,13 +162,13 @@ export default function Index() {
     let numberOfCalls: number = Math.ceil(numCommits / 100);
     for (let i = 0; i < numberOfCalls; i++) {
       if (session && accessToken) {
-        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}&page=${page}`, {
+        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${Math.min(numCommits, 100)}&page=${page}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         })
       } else {
-        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}&page=${page}`)
+        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${Math.min(numCommits, 100)}&page=${page}`)
       }
       let eventJSON: Array<object> = await eventResponse.json();
       page++
