@@ -35,7 +35,7 @@ export default function Features (): JSX.Element {
                     </div>
                     <div>
                         <h4>Download and share</h4>
-                        <p>Download each chart with a simple click, making it easy to share your insights and findings with others. Whether it's for a presentation, a blog post, or a portfolio, our tool enables you to effortlessly showcase your coding journey.</p>
+                        <p>Download each chart with a simple click, making it easy to share your insights and findings with others. Whether it&apos;s for a presentation, a blog post, or a portfolio, our tool enables you to effortlessly showcase your coding journey.</p>
                     </div>
                 </span>
                 <span>
@@ -53,7 +53,7 @@ export default function Features (): JSX.Element {
                     </div>
                     <div>
                         <h4>Open source</h4>
-                        <p>We believe in the power of collaboration and transparency. That's why our project is open source, allowing developers like you to explore, contribute, and enhance the tool's functionalities. Join our community and help us shape the future of Github profile analysis.</p>
+                        <p>We believe in the power of collaboration and transparency. That&apos;s why our project is open source, allowing developers like you to explore, contribute, and enhance the tool&apos;s functionalities. Join our community and help us shape the future of Github profile analysis.</p>
                     </div>
                 </span>
             </section>
