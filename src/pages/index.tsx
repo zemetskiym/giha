@@ -189,7 +189,6 @@ export default function Index() {
     }
     setEventData(combinedData);
   }
-  console.log(eventData)
 
   // Use the useEffect hook to remove error messages after 5000 milliseconds of being set
   useEffect(() => {
