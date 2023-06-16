@@ -186,7 +186,7 @@ export default function Hero (props: Props): JSX.Element {
         <div onClick={() => setShowPopup(false)}>
           <p>
             Authenticating with GitHub allows you to increase your rate limit and perform a deeper analysis of your GitHub profile.
-            By connecting with GitHub, you'll have access to more commits and a richer analysis experience.
+            By connecting with GitHub, you&apos;ll have access to more commits and a richer analysis experience.
           </p>
         </div>
     );
