@@ -30,8 +30,8 @@ export default function Languages(props: Props): JSX.Element {
     const windowSize = useWindowSizeContext();
 
     // Destructure the props object
-    const {commitData = []} = props
-    const filteredCommitData = commitData.filter(Boolean) as Array<Commit>
+    const {commitData = []} = props;
+    const filteredCommitData = commitData.filter(Boolean) as Array<Commit>;
 
     // Declare an empty array to store results
     const [results, setResults] = useState<Array<any>>([]);
@@ -42,6 +42,9 @@ export default function Languages(props: Props): JSX.Element {
 
     // Create React state to hold the current chart
     const [currentChart, setCurrentChart] = useState<string>("CumulativeStackedAreaChart");
+
+    // Check if the required commit data is available.
+    const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1;
 
     // Define a helper function cleanUpDiff to remove unnecessary characters from a string
     function cleanUpDiff(diff: string) {
@@ -279,9 +282,6 @@ export default function Languages(props: Props): JSX.Element {
 
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function PieChart(): JSX.Element {
-        // Check if the required data is available.
-        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1;
-
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
             // Check if the SVG element and the required data are available.
@@ -387,7 +387,7 @@ export default function Languages(props: Props): JSX.Element {
     
     // Return the component JSX
     return (
-        <>
+        <section style={hasData ? {display: "block"} : {display: "none"}}>
             <div>
                 <h1>Languages</h1>
                 <small>
@@ -413,6 +413,6 @@ export default function Languages(props: Props): JSX.Element {
             <>
                 {currentChart == "CumulativeStackedAreaChart" ? CumulativeStackedAreaChart() : PieChart()}
             </>
-        </>
+        </section>
     )
 }

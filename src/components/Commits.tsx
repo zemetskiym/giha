@@ -36,6 +36,9 @@ export default function Commits(props: Props): JSX.Element {
     // Declare an empty array to store results
     const [results, setResults] = useState<Array<any>>([]);
 
+    // Check if the required data is available.
+    const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1;
+
     // Create a reference to the SVG element that will be rendered.
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -93,9 +96,6 @@ export default function Commits(props: Props): JSX.Element {
     }
 
     function BarcodePlot(): JSX.Element {
-        // Check if the required data is available.
-        const hasData = results && results.length === filteredCommitData.length && results.filter((item) => item !== null).length > 1;
-
         // Use the useEffect hook to execute code after the component is mounted or updated.
         useEffect(() => {
             if(hasData) {
@@ -245,7 +245,7 @@ export default function Commits(props: Props): JSX.Element {
     
     // Return the component JSX
     return (
-        <>
+        <section style={hasData ? {display: "block"} : {display: "none"}}>
             <div>
                 <h1>Commits</h1>
                 <Image src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
@@ -253,6 +253,6 @@ export default function Commits(props: Props): JSX.Element {
             <>
                 {BarcodePlot()}
             </>
-        </>
+        </section>
     );
 } 

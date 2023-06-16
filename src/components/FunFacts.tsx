@@ -37,6 +37,9 @@ export default function Commits(props: Props): JSX.Element {
     const timeOfWeekSvgRef = useRef<SVGSVGElement>(null);
     const LOCSvgRef = useRef<SVGSVGElement>(null);
 
+    // Check if the required commit data is available.
+    const hasData = commitData.length > 0;
+
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
 
     // Function to find the object with the highest value property
@@ -423,7 +426,7 @@ export default function Commits(props: Props): JSX.Element {
     }
 
     return (
-        <>
+        <section style={hasData ? {display: "block"} : {display: "none"}}>
             <h1>Fun Facts</h1>
             <div>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
             <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
@@ -445,6 +448,6 @@ export default function Commits(props: Props): JSX.Element {
                     {LOCBarChart()}
                 </div>
             </span>
-        </>
+        </section>
     );
 };
