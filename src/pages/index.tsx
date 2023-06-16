@@ -60,7 +60,7 @@ export default function Index() {
   const [search, setSearch] = useState<Search>({user: "", submit: false});
   const [userData, setUserData] = useState<object | null>(null);
   const [repoData, setRepoData] = useState<Array<object> | null>(null);
-  const [numCommits, setNumCommits] = useState<number>(1);
+  const [numCommits, setNumCommits] = useState<number>(20);
   const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null);
   const [commitData, setCommitData] = useState<Array<Commit | null>>([]);
   const [error, setError] = useState<string | null>(null);
