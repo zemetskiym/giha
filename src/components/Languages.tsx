@@ -167,10 +167,36 @@ export default function Languages(props: Props): JSX.Element {
                 // Clear the SVG by removing all existing elements.
                 svg.selectAll('*').remove();
 
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
+                // Find the string of the highest y-axis value.
+                let totalCommits = Math.round(resultsWithoutNull.length);
+
+                // Generate a temporary text element in the DOM.
+                let temporaryTextElement;
+                if (windowSize.width < 400) {
+                    temporaryTextElement = svg.append("text")
+                    .text(totalCommits)
+                    .style("font-size", `${10 / baseFontSize}rem`)
+                    .style("font-family", "Arial");
+                } else {
+                    temporaryTextElement = svg.append("text")
+                    .text(totalCommits)
+                    .style("font-size", `${12 / baseFontSize}rem`)
+                    .style("font-family", "Arial");
+                };
+
+                // Calculate the longest repo width based on the computed text
+                const longestYAxisValue = temporaryTextElement.node()?.getComputedTextLength();
+
+                // Remove the temporary text element from the DOM.
+                temporaryTextElement.remove();
+
                 // Define the dimensions of the chart and its margins.
                 const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
-                const margin = {top: 10, right: 20, bottom: 42, left: 30};
+                const margin = {top: 20, right: 20, bottom: 42, left: (longestYAxisValue || 10) + 20};
 
                 // Determine the earliest and latest dates in the results array.
                 const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
@@ -259,9 +285,6 @@ export default function Languages(props: Props): JSX.Element {
                         .attr("d", area as any)
                     .append("title")
                         .text(d => d.key);
-
-                // Set the base font size.
-                const baseFontSize = 16; // in pixels
 
                 // Set text font size.
                 if (windowSize.width < 400) {

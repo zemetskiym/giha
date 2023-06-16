@@ -148,7 +148,7 @@ export default function Commits(props: Props): JSX.Element {
                 temporaryTextElement.remove();
 
                 // Define the margins of the chart.
-                const margin = ({top: 10, right: 20, bottom: 42, left: (longestRepoWidth || 200) + 20});
+                const margin = ({top: 20, right: 20, bottom: 42, left: (longestRepoWidth || 200) + 20});
 
                 // Define the dimensions of the chart.
                 const height = repoSet.size * 30 + margin.top + margin.bottom;
@@ -176,7 +176,6 @@ export default function Commits(props: Props): JSX.Element {
                     .domain(repoSet)
                     .rangeRound([margin.top, height - margin.bottom])
                     .padding(0.1);
-
                 // Define the y-axis with tick lines, guidelines, and no axis line.
                 const yAxis = (g: d3.Selection<SVGGElement, unknown, null, undefined>) => g
                     .attr("transform", `translate(${margin.left},0)`)
@@ -237,7 +236,7 @@ export default function Commits(props: Props): JSX.Element {
         if (hasData) {
             const repoSet: Set<string> = new Set();
             results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)});
-            return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 52} />;
+            return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 72} />;
         }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
