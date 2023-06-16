@@ -156,43 +156,40 @@ export default function Index() {
     }
 
     // Fetch event data
-    let eventResponse: Response
-    if (session && accessToken) {
-      eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-    } else {
-      eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}`)
-    }
-    let eventData: Array<object> = await eventResponse.json()
+    let eventResponse: Response;
+    let page = 1;
+    let combinedData: Array<object> = [];
+    let numberOfCalls: number = Math.ceil(numCommits / 100);
+    for (let i = 0; i < numberOfCalls; i++) {
+      if (session && accessToken) {
+        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}&page=${page}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+      } else {
+        eventResponse = await fetch(`https://api.github.com/users/${search.user}/events/public?event=PushEvent&per_page=${numCommits}&page=${page}`)
+      }
+      let eventJSON: Array<object> = await eventResponse.json();
+      page++
 
-    // Handle different HTTP status codes
-    if (eventResponse.status >= 200 && eventResponse.status < 300) {
-      setEventData(eventData)
+      // Handle different HTTP status codes
+      if (eventResponse.status >= 200 && eventResponse.status < 300) {
+        combinedData.push(...eventJSON);
+      }
+      else if (eventResponse.status == 404) {
+        setError("Please enter a valid username.")
+      }
+      else if (eventResponse.status == 403) {
+        setError("Please wait for the API rate limit to reset.")
+      }
+      else {
+        setError(`Unknown error code: ${eventResponse.status}.`)
+      }
     }
-    else if (eventResponse.status == 404) {
-      setError("Please enter a valid username.")
-    }
-    else if (eventResponse.status == 403) {
-      setError("Please wait for the API rate limit to reset.")
-    }
-    else {
-      setError(`Unknown error code: ${eventResponse.status}.`)
-    }
-
-    if (eventData != null && eventData.length > 0) {
-      eventData.forEach((event: Partial<Event>) => {
-        // Call async fetchCommit function because async operations are not allowed in forEach loops
-        if (event.payload!.commits != undefined) {
-          fetchCommit(event.repo!.name.split("/")[0], event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
-        } else {
-          setCommitData(prev => [...prev, null])
-        }
-      })
-    }
+    setEventData(combinedData);
   }
+  console.log(eventData)
 
   // Use the useEffect hook to remove error messages after 5000 milliseconds of being set
   useEffect(() => {
@@ -208,6 +205,19 @@ export default function Index() {
   useEffect(() => {
     if(search.submit == true) fetchData()
   }, [search.submit])
+
+  useEffect(() => {
+    if (eventData != null && eventData.length > 0 && commitData.length == 0) {
+      eventData.forEach((event: Partial<Event>) => {
+        // Call async fetchCommit function because async operations are not allowed in forEach loops
+        if (event.payload!.commits != undefined) {
+          fetchCommit(event.repo!.name.split("/")[0], event.repo!.name.split("/")[1], event.payload!.commits[0].sha)
+        } else {
+          setCommitData(prev => [...prev, null])
+        }
+      })
+    }
+  }, [eventData])
 
   // Render either the Home or data analysis components based on whether userData and repoData are null or not
   return (
