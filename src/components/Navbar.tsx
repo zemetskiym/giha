@@ -23,7 +23,7 @@ export default function Navbar (): JSX.Element {
         <nav id={styles.navbar}>
             {windowSize.width >= 500 && 
                 <ul id={styles.navbarList}>
-                    <li id={styles.title}>Commits Analyzer</li>
+                    <li id={styles.title}>OAuthenticity</li>
 
                     {/* Rendering the sign in button if the user is not signed in */}
                     {!session && <li onClick={() => signIn()} className={styles.navLink}>
