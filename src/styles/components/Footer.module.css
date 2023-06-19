@@ -1,0 +1,34 @@
+#footer {
+    padding: 0 20px;
+}
+
+#hr {
+    width: 100px;
+}
+
+#links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh 20px 2vh 20px;
+}
+
+.link {
+    margin-right: 20px;
+    color: #104d93;
+    text-decoration: none;
+    text-align: center;
+}
+
+.link:last-child {
+    margin-right: 0;
+}
+
+#copyright {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2vh;
+    color: #4d4d4d;
+    text-align: center;
+}
