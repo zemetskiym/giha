@@ -99,7 +99,7 @@ export default function Hero (props: Props): JSX.Element {
                     svg.selectAll('*').remove();
             
                     // Set the height and width of the SVG.
-                    const height = Math.min(windowSize.width, 600);
+                    const height = 600;
                     const width = windowSize.width;
                     const sensitivity = 75;
 
@@ -114,8 +114,8 @@ export default function Hero (props: Props): JSX.Element {
 
                     // Append a circle representing the globe to the SVG.
                     let globe = svg.append("circle")
-                        .attr("fill", "#EEE")
-                        .attr("stroke", "#000")
+                        .attr("fill", "#f5f5f5")
+                        .attr("stroke", "#bdbdbd")
                         .attr("stroke-width", "0.2")
                         .attr("cx", width/2)
                         .attr("cy", height/2)
@@ -131,12 +131,12 @@ export default function Hero (props: Props): JSX.Element {
                         .enter().append("path")
                         .attr("class", (d: any) => "country_" + d.properties.name.replace(" ","_"))
                         .attr("d", path)
-                        .style("fill", "white")
+                        .style("fill", "#dddddd")
                         .style("stroke", (d: any) => {
                             if (d.geometry.type === "Point") {
-                              return "steelblue"; // Set the color for points
+                              return "#b3b3b3"; // Set the color for points
                             } else {
-                              return "black"; // Set the color for other shapes
+                              return "#bdbdbd"; // Set the color for other shapes
                             }
                           })
                         .style("stroke-width", (d: any) => {
@@ -157,7 +157,7 @@ export default function Hero (props: Props): JSX.Element {
                         .attr("class", "graticule")
                         .attr("d", path)
                         .style("fill", "none")
-                        .style("stroke", "#ccc")
+                        .style("stroke", "#bdbdbd")
                         .style("stroke-width", 0.4);
 
                     // Update the rotation of the globe and paths every 200 milliseconds.
@@ -179,59 +179,57 @@ export default function Hero (props: Props): JSX.Element {
             fetchData(); // Invoke the fetchData function to fetch the data
         }, [windowSize]);
 
-        return <svg ref={svgRef} width={windowSize.width} height={Math.min(windowSize.width, 600)} />;
+        return <svg ref={svgRef} width={windowSize.width} height={600} />;
     };
 
     const AuthenticationPopup = () => (
-        <div onClick={() => setShowPopup(false)}>
-          <p>
-            Authenticating with GitHub allows you to increase your rate limit and perform a deeper analysis of your GitHub profile.
+        <div id={styles.popup} onClick={() => setShowPopup(false)}>
             By connecting with GitHub, you&apos;ll have access to more commits and a richer analysis experience.
-          </p>
         </div>
     );
 
     // Returning the JSX element, which displays a search input and submit button.
     return (
-        <section>
-            <div>
-                <Image src="/icons/unlock.svg" width={40} height={40} alt="" />
-                <div>
-                    <h1>Unlock the coding universe on GitHub</h1>
-                    <h2>Analyze user profiles, track coding patterns, and explore global collaboration</h2>
-                </div>
-            </div>
-            <div>
+        <section id={styles.hero}>
+            <div id={styles.globe}>
                 {RenderGlobe()}
             </div>
-            <form onSubmit={event => handleSubmit(event)}>
-                <h2>Get started</h2>
+            <div id={styles.intro}>
+                <Image id={styles.unlock} src="/icons/unlock.svg" width={40} height={40} alt="" />
+                <div>
+                    <h1 id={styles.title}>Unlock the coding universe on GitHub</h1>
+                    <h2 id={styles.subtitle}>Analyze user profiles, track coding patterns, and explore global collaboration</h2>
+                </div>
+            </div>
+            <form onSubmit={event => handleSubmit(event)} id={styles.form}>
+                <h2 id={styles.getStarted}>Get started</h2>
+                {showPopup && <AuthenticationPopup />}
                 {!session && 
-                    <div>
-                        {showPopup && <AuthenticationPopup />}
-                        <button type="button" onClick={() => signIn()}>
-                            <Image src="/icons/github.svg" width={20} height={20} alt="" />
+                    <div id={styles.signInContainer}>
+                        <button id={styles.signIn} type="button" onClick={() => signIn()}>
+                            <Image id={styles.githubIcon} src="/icons/github.svg" width={20} height={20} alt="" />
                             <span>Sign in with GitHub</span>
                         </button>
-                        <button onClick={() => setShowPopup(prev => !prev)}>?</button>
+                        <button id={styles.help} onClick={() => setShowPopup(prev => !prev)}>?</button>
                     </div>
                 }
-                <div>
+                <div id={styles.searchContainer}>
                     <input 
+                        id={styles.search}
                         type="text" 
                         onChange={event => setSearch(({user: event.target.value, submit: false}))}
                         value={search.user}
-                        placeholder="Search for user..."
+                        placeholder="Github Username*"
                     />
-                    <select value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
+                    <select id={styles.select} value={numCommits} onChange={event => setNumCommits(+event.target.value)}>
                         <option value={20}>20 Commits</option>
                         <option value={40}>40 Commits</option>
                         {session && accessToken && <option value={100}>100 Commits</option>}
                         {session && accessToken && <option value={200}>200 Commits</option>}
                         {session && accessToken && <option value={500}>500 Commits</option>}
                     </select>
-                    <button>Submit</button>
                 </div>
+                <button style={search.user.length > 0 ? {backgroundColor: '#1565c0', cursor: 'pointer'} : {backgroundColor: '#3b4d61', cursor: 'not-allowed'}} id={styles.submit}>Submit</button>
             </form>
         </section>
     )

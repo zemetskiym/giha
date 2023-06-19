@@ -1,0 +1,154 @@
+#hero {
+    height: 600px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #f0f0f0;
+}
+
+#globe {
+    height: 600px;
+    width: 100%;
+    top: 50px;
+    left: 0;
+    position: absolute;
+    z-index: 0;
+}
+
+#intro {
+    width: min(410px, 95%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: 1;
+}
+
+#unlock {
+    align-self: flex-start;
+    margin-right: 20px;
+    filter: invert(27%) sepia(97%) saturate(1351%) hue-rotate(195deg) brightness(91%) contrast(92%);
+}
+
+#title {
+    color: #212121;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+#subtitle {
+    color: #424242;
+    text-align: justify;
+}
+
+#form {
+    width: min(410px, 95%);
+    z-index: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px #e0e0e0 solid;
+    border-radius: 10px;
+}
+
+#getStarted {
+    color: #212121;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+#signInContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#signIn {
+    background-color: #212121;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#githubIcon {
+    filter: brightness(0) invert(1);
+    margin-right: 10px;
+}
+
+#help {
+    cursor: help;
+    height: 26px;
+    width: 26px;
+    background-color: #ffffff;
+    border: 1px solid #bdbdbd;
+    color: #424242;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+#popup {
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    color: #104d93;
+}
+
+#searchContainer {
+    display: flex;
+    overflow: wrap;
+}
+
+#search {
+    height: 32px;
+    width: 60%;
+    background-color: #ffffff;
+    border: 1px solid #bdbdbd;
+    padding: 6px 15px;
+    border-radius: 5px 0px 0px 5px;
+    font-size: 1rem;
+}
+
+#select {
+    cursor: pointer;
+    height: 32px;
+    width: 40%;
+    padding: 6px 15px;
+    border-radius: 0px 5px 5px 0px;
+    color: #424242;
+    border: solid #bdbdbd;
+    border-width: 1px 1px 1px 0;
+    font-size: 1rem;
+}
+
+#submit {
+    width: 100%;
+    padding: 8px;
+    font-weight: 600;
+    margin-top: 20px;
+    background-color: #104d93;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 1050px) {
+    #hero {
+        flex-direction: column;
+        height: 600px;
+        justify-content: center;
+    }
+    #intro {
+        margin-bottom: 20px;
+    }
+    #title {
+        font-size: 2rem;
+    }
+    #subtitle {
+        font-size: 1.4rem;
+        text-align: left;
+    }
+}
