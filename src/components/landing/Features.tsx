@@ -6,60 +6,60 @@ export default function Features (): JSX.Element {
     return (
         <>
             <section>
-                <div>
-                    <Image src="/landing/commit-languages-area-chart.svg" height={150} width={300} alt="" />
-                    <span>
-                        <h3>Visualize the evolution of your programming skills</h3>
-                        <p>Uncover the journey of your programming skills with our cumulative stacked area chart. This powerful visualization displays the growth and changes in your preferred programming languages over time, allowing you to track your progress, adapt to emerging technologies, and showcase your expertise.</p>
+                <div className={styles.feature}>
+                    <Image className={styles.featureImage} src="/landing/commit-languages-area-chart.svg" height={150} width={300} alt="" />
+                    <span className={styles.featureText}>
+                        <h3 className={styles.featureTextTitle}>Visualize the evolution of your programming skills</h3>
+                        <p className={styles.featureTextParagraph}>Uncover the journey of your programming skills with our cumulative stacked area chart. This powerful visualization displays the growth and changes in your preferred programming languages over time, allowing you to track your progress, adapt to emerging technologies, and showcase your expertise.</p>
                     </span>
                 </div>
-                <div>
-                    <span>
-                        <h3>Understand your coding palette at a glance</h3>
-                        <p>Get a visual snapshot of your coding palette with our intuitive pie chart. This dynamic visualization breaks down the distribution of languages on your Github profile, giving you a quick and comprehensive understanding of your programming repertoire and the areas where you excel.</p>
+                <div className={styles.feature}>
+                    <span className={styles.featureText}>
+                        <h3 className={styles.featureTextTitle}>Understand your coding palette at a glance</h3>
+                        <p className={styles.featureTextParagraph}>Get a visual snapshot of your coding palette with our intuitive pie chart. This dynamic visualization breaks down the distribution of languages on your Github profile, giving you a quick and comprehensive understanding of your programming repertoire and the areas where you excel.</p>
                     </span>
-                    <Image src="/landing/commit-languages-pie-chart.svg" height={150} width={300} alt="" />
+                    <Image id={styles.pieChart} className={styles.featureImage}  src="/landing/commit-languages-pie-chart.svg" height={150} width={150} alt="" />
                 </div>
-                <div>
-                    <Image src="/landing/commits-over-day-of-week.svg" height={300} width={300} alt="" />
-                    <span>
-                        <h3>Master your commitment to excellence</h3>
-                        <p>Illuminate your coding journey with our visually engaging line chart, complete with inline labels that reveal the distribution of your commits across different days of the week. Discover your most prolific periods, adapt your coding routine for optimal productivity, and pave the way towards becoming a more accomplished and disciplined developer.</p>
+                <div className={styles.feature}>
+                    <Image className={styles.featureImage}  src="/landing/commits-over-LOC.svg" height={150} width={150} alt="" />
+                    <span className={styles.featureText}>
+                        <h3 className={styles.featureTextTitle}>Master your commitment to excellence</h3>
+                        <p className={styles.featureTextParagraph}>Gain insights into your coding patterns and productivity with our bar chart showcasing the distribution of commits over various lines of code (LOC). This visualization allows you to see the frequency of your commits based on the size of the code changes, helping you understand where you spend the most time and effort in your projects.</p>
                     </span>
                 </div>
             </section>
-            <section>
-                <span>
-                    <div>
-                        <Image src="/icons/download.svg" height={40} width={40} alt="" />
+            <section id={styles.additionalFeatureSection}>
+                <span className={styles.additionalFeature}>
+                    <div className={styles.additionalFeatureBox}>
+                        <Image className={styles.additionalFeatureIcon} src="/icons/download.svg" height={30} width={30} alt="" />
                     </div>
                     <div>
-                        <h4>Download and share</h4>
-                        <p>Download each chart with a simple click, making it easy to share your insights and findings with others. Whether it&apos;s for a presentation, a blog post, or a portfolio, our tool enables you to effortlessly showcase your coding journey.</p>
-                    </div>
-                </span>
-                <span>
-                    <div>
-                        <Image src="/icons/shield-checkmark.svg" height={40} width={40} alt="" />
-                    </div>
-                    <div>
-                        <h4>Secure authenticated user data</h4>
-                        <p>Be rest assured that your authenticated user data is handled with utmost care. We prioritize the security and privacy of your information, ensuring that it remains confidential and protected throughout the analysis process.</p>
+                        <h4 className={styles.additionalFeatureTitle}>Download and share</h4>
+                        <p className={styles.additionalFeatureParagraph}>Download each chart with a simple click, making it easy to share your insights and findings with others.</p>
                     </div>
                 </span>
-                <span>
-                    <div>
-                        <Image src="/icons/code.svg" height={40} width={40} alt="" />
+                <span className={styles.additionalFeature}>
+                    <div className={styles.additionalFeatureBox}>
+                        <Image className={styles.additionalFeatureIcon} src="/icons/shield-checkmark.svg" height={30} width={30} alt="" />
                     </div>
                     <div>
-                        <h4>Open source</h4>
-                        <p>We believe in the power of collaboration and transparency. That&apos;s why our project is open source, allowing developers like you to explore, contribute, and enhance the tool&apos;s functionalities. Join our community and help us shape the future of Github profile analysis.</p>
+                        <h4 className={styles.additionalFeatureTitle}>Secure authenticated user data</h4>
+                        <p className={styles.additionalFeatureParagraph}>We prioritize the security and privacy of your information, ensuring that it remains confidential and protected throughout the analysis process.</p>
+                    </div>
+                </span>
+                <span className={styles.additionalFeature}>
+                    <div className={styles.additionalFeatureBox}>
+                        <Image className={styles.additionalFeatureIcon} src="/icons/code.svg" height={30} width={30} alt="" />
+                    </div>
+                    <div>
+                        <h4 className={styles.additionalFeatureTitle}>Open source</h4>
+                        <p className={styles.additionalFeatureParagraph}>We believe in the power of collaboration and transparency. That&apos;s why our project is open source, allowing developers like you to explore, contribute, and enhance the tool&apos;s functionalities.</p>
                     </div>
                 </span>
             </section>
-            <section>
-                <button>
-                    <Link target="_blank" href="https://github.com/zemetskiym/commits-analyzer">Explore the code</Link>
+            <section id={styles.exploreSection}>
+                <button id={styles.exploreButton}>
+                    <Link id={styles.exploreLink} target="_blank" href="https://github.com/zemetskiym/commits-analyzer">Explore the code</Link>
                 </button>
             </section>
         </>
