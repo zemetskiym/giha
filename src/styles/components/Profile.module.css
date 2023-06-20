@@ -13,11 +13,12 @@
 #name {
     font-size: 1.5rem;
     color: #212121;
+    font-weight: 600;
 }
 
 #login {
     margin-left: 15px;
-    color: #595959;
+    color: #525252;
 }
 
 #stats {
