@@ -1,5 +1,5 @@
 // Import necessary modules
-import styles from "@/styles/components.Languages.module.css"
+import styles from "@/styles/components/Languages.module.css"
 import { useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js'
 import { languageColors } from "../../public/languageColors";
@@ -196,7 +196,12 @@ export default function Languages(props: Props): JSX.Element {
                 // Define the dimensions of the chart and its margins.
                 const height = Math.min(windowSize.width / 2, 600);
                 const width = Math.min(windowSize.width, 1200);
-                const margin = {top: 20, right: 20, bottom: 42, left: (longestYAxisValue || 10) + 20};
+                let margin: {top: number, right: number, bottom: number, left: number};
+                if (windowSize.width < 1200) {
+                    margin = {top: 20, right: 10, bottom: 42, left: (longestYAxisValue || 10) + 19};
+                } else {
+                    margin = {top: 20, right: 0, bottom: 42, left: (longestYAxisValue || 10) + 9};
+                }
 
                 // Determine the earliest and latest dates in the results array.
                 const earliestDate: Date = resultsWithoutNull.reduce((min: Date, d: { language: string, color: string, date: Date }) => d.date < min ? d.date : min, resultsWithoutNull[0].date);
@@ -289,10 +294,12 @@ export default function Languages(props: Props): JSX.Element {
                 // Set text font size.
                 if (windowSize.width < 400) {
                     svg.selectAll("text")
-                        .style("font-size", `${10 / baseFontSize}rem`);
+                        .style("font-size", `${10 / baseFontSize}rem`)
+                        .style("font-family", "Arial");
                 } else {
                     svg.selectAll("text")
-                        .style("font-size", `${12 / baseFontSize}rem`);
+                        .style("font-size", `${12 / baseFontSize}rem`)
+                        .style("font-family", "Arial");
                 };
             }
         }, [results, areaChartSvgRef, windowSize]);
@@ -410,15 +417,16 @@ export default function Languages(props: Props): JSX.Element {
     
     // Return the component JSX
     return (
-        <section style={hasData ? {display: "block"} : {display: "none"}}>
-            <div>
-                <h1>Languages</h1>
-                <small>
-                    <button onClick={() => setCurrentChart("CumulativeStackedAreaChart")}>Area chart</button> 
+        <section id={styles.languages} style={hasData ? {display: "flex"} : {display: "none"}}>
+            <div id={styles.intro}>
+                <h1 id={styles.title}>Languages</h1>
+                <small id={styles.options}>
+                    <button className={styles.option} style={currentChart == "CumulativeStackedAreaChart" ? {color: "#104d93"} : {color: "#595959"}} onClick={() => setCurrentChart("CumulativeStackedAreaChart")}>Area chart</button> 
                     {" "}/{" "}
-                    <button onClick={() => setCurrentChart("PieChart")}>Pie chart</button>
+                    <button className={styles.option} style={currentChart == "CumulativeStackedAreaChart" ? {color: "#595959"} : {color: "#104d93"}} onClick={() => setCurrentChart("PieChart")}>Pie chart</button>
                 </small>
                 <Image 
+                    id={styles.download}
                     src="/icons/download.svg" 
                     onClick={() => {currentChart == "CumulativeStackedAreaChart" ? handleDownload(areaChartSvgRef) : handleDownload(pieChartSvgRef)}} 
                     height={20} 
