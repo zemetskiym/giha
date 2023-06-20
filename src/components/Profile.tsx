@@ -1,6 +1,7 @@
 // Importing styles and Image component from Next.js
-import styles from "@/styles/components/Profile.module.css"
-import Image from "next/image"
+import styles from "@/styles/components/Profile.module.css";
+import Image from "next/image";
+import { useWindowSizeContext } from '@/components/context';
 
 // Defining the User and Repo interfaces
 interface User {
@@ -26,6 +27,9 @@ interface Props {
 export default function Profile (props: Props): JSX.Element {
     const {userData, repoData} = props
     const {name, login, avatar_url, public_repos, followers, following} = userData
+
+    // Import the window size context
+    const windowSize = useWindowSizeContext();
     
     // Defining a function to calculate the total number of stars for all repos
     function stars() {
@@ -38,27 +42,27 @@ export default function Profile (props: Props): JSX.Element {
 
     // Returning the JSX element, which displays user and repo data
     return (
-        <header>
-            <h1>Profile</h1>
-            <section>
-                {name != null && <span>{name}</span>}
-                <small>{login}</small>
+        <section id={styles.profile}>
+            <section id={styles.user}>
+                {name != null && <span id={styles.name}>{name}</span>}
+                <small id={styles.login}>{login}</small>
             </section>
-            <section>
-                {avatar_url != undefined && <Image alt="" src={avatar_url} height={100} width={100} />}
-                <span>
-                    {stars()} {stars() == 1 ? "Star" : "Stars"}
+            <section id={styles.stats}>
+                <div id={styles.line}></div>
+                {avatar_url != undefined && <Image id={styles.avatar} alt="" src={avatar_url} height={windowSize.width >= 300 ? 100: 50} width={windowSize.width >= 300 ? 100: 50} />}
+                <span className={styles.statBox}>
+                    <span className={styles.statLabel}>Stars</span>{stars()}
                 </span>
-                <span>
-                    {public_repos} Repos
+                <span className={styles.statBox}>
+                    <span className={styles.statLabel}>Repos</span>{public_repos}
                 </span>
-                <span>
-                    {followers} {followers == 1 ? "Follower" : "Followers"}
-                </span>
-                <span>
-                    {following} Following
-                </span>
+                {windowSize.width >= 550 && <span className={styles.statBox}>
+                    <span className={styles.statLabel}>Followers</span>{followers}
+                </span>}
+                {windowSize.width >= 550 &&<span className={styles.statBox}>
+                    <span className={styles.statLabel}>Following</span>{following}
+                </span>}
             </section>
-        </header>
+        </section>
     )
 }

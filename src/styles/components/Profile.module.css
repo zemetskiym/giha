@@ -1,0 +1,76 @@
+#profile {
+    padding: 2vh 10px 4px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#user {
+    width: min(1200px, 100vw);
+    z-index: 2;
+}
+
+#name {
+    font-size: 1.5rem;
+    color: #212121;
+}
+
+#login {
+    margin-left: 15px;
+    color: #595959;
+}
+
+#stats {
+    width: min(1200px, 100vw);
+    display: flex;
+    align-items: center;
+    margin-top: 14px;
+}
+
+#line {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    width: 100vw;
+    background-color: #bdbdbd;
+    z-index: 1;
+    box-shadow: 0px -70px 0px 70px #f7f7f7;
+}
+
+#avatar {
+    box-sizing: content-box;
+    border-radius: 50%;
+    box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px #bdbdbd;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.statBox {
+    padding: 10px 20px;
+    background-color: #e7e7e7;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.statBox:first-of-type {
+    margin-left: 14px;
+}
+
+.statLabel {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+@media screen and (max-width: 1200px) {
+    #user {
+        padding: 0 10px;
+    }
+    #stats {
+        padding: 0 14px;
+    }
+}
