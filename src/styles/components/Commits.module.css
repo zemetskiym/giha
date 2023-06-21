@@ -1,0 +1,26 @@
+#commits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh 10px 0px 10px;
+}
+
+#intro {
+    width: min(1200px, 100%);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#title {
+    font-size: 1.2rem;
+    color: #212121;
+}
+
+#download {
+    cursor: pointer;
+    margin-left: auto;
+    filter: invert(0%) sepia(18%) saturate(0%) hue-rotate(160deg) brightness(90%) contrast(74%);
+}

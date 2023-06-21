@@ -148,8 +148,13 @@ export default function Commits(props: Props): JSX.Element {
                 temporaryTextElement.remove();
 
                 // Define the margins of the chart.
-                const margin = ({top: 20, right: 20, bottom: 42, left: (longestRepoWidth || 200) + 20});
-
+                let margin: {top: number, right: number, bottom: number, left: number};
+                if (windowSize.width < 1200) {
+                    margin = ({top: 0, right: 10, bottom: 42, left: (longestRepoWidth || 200) + 19});
+                } else {
+                    margin = ({top: 0, right: 0, bottom: 42, left: (longestRepoWidth || 200) + 9});
+                }
+                
                 // Define the dimensions of the chart.
                 const height = repoSet.size * 30 + margin.top + margin.bottom;
                 const width = Math.min(windowSize.width, 1200);
@@ -244,10 +249,10 @@ export default function Commits(props: Props): JSX.Element {
     
     // Return the component JSX
     return (
-        <section style={hasData ? {display: "block"} : {display: "none"}}>
-            <div>
-                <h1>Commits</h1>
-                <Image src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
+        <section id={styles.commits} style={hasData ? {display: "flex"} : {display: "none"}}>
+            <div id={styles.intro}>
+                <h1 id={styles.title}>Commits</h1>
+                <Image id={styles.download} src="/icons/download.svg" onClick={handleDownload} height={20} width={20} alt="Download" />
             </div>
             <>
                 {BarcodePlot()}
