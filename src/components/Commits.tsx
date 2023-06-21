@@ -209,7 +209,7 @@ export default function Commits(props: Props): JSX.Element {
 
                 // Create bars for data.
                 svg.append("g")
-                        .attr("fill", "steelblue")
+                        .attr("fill", "#1565c0")
                         .attr("stroke-width", 10)
                         .attr("pointer-events", "all")
                     .selectAll("rect")
