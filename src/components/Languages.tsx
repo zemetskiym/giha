@@ -37,6 +37,7 @@ export default function Languages(props: Props): JSX.Element {
     const [results, setResults] = useState<Array<any>>([]);
 
     // Create a reference to the SVG element that will be rendered.
+    const swatchLegendSvgRef = useRef<SVGSVGElement>(null);
     const areaChartSvgRef = useRef<SVGSVGElement>(null);
     const pieChartSvgRef = useRef<SVGSVGElement>(null);
 
@@ -124,12 +125,19 @@ export default function Languages(props: Props): JSX.Element {
 
     function handleDownload(svgRef: React.RefObject<SVGSVGElement>) {
         // Get the SVG element
-        const svgElement = svgRef.current;
+        const chartSvgElement = svgRef.current;
+        const legendSvgElement = swatchLegendSvgRef.current;
 
-        if (svgElement != null) {
+        if (chartSvgElement != null && legendSvgElement != null) {
             // Convert the SVG element to a Blob
-            const svgData = new XMLSerializer().serializeToString(svgElement);
-            const blob = new Blob([svgData], { type: "image/svg+xml" });
+            const chartSvgData = new XMLSerializer().serializeToString(chartSvgElement);
+            const legendSvgData = new XMLSerializer().serializeToString(legendSvgElement);
+
+            // Combine the SVG data into one SVG string
+            const combinedSvgData = `<svg>${legendSvgData}${chartSvgData}</svg>`;
+
+            // Convert the combined SVG data to a Blob
+            const blob = new Blob([combinedSvgData], { type: "image/svg+xml" });
 
             // Create a URL for the Blob
             const url = URL.createObjectURL(blob);
@@ -150,8 +158,6 @@ export default function Languages(props: Props): JSX.Element {
     }
 
     function SwatchLegend() {
-        const swatchLegendSvgRef = useRef<SVGSVGElement>(null);
-
         // Remove any null values from the results array.
         const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
                 
@@ -465,7 +471,7 @@ export default function Languages(props: Props): JSX.Element {
 
                 // Define the dimensions of the chart and its margins.
                 const height = Math.min(windowSize.width / 2, 600);
-                const width = Math.min(windowSize.width / 2, 600);
+                const width = Math.min(windowSize.width, 1200);
 
                 // Define the radius of the chart.
                 const padAngle = 0;
@@ -519,7 +525,7 @@ export default function Languages(props: Props): JSX.Element {
         }, [results, pieChartSvgRef, windowSize]);
 
         // Return the SVG element with the specified dimensions.
-        if (hasData) return <svg ref={pieChartSvgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
+        if (hasData) return <svg ref={pieChartSvgRef} width={Math.min(windowSize.width, 1200)} height={Math.min(windowSize.width / 2, 600)} />;
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>
     }
