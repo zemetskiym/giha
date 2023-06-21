@@ -149,6 +149,126 @@ export default function Languages(props: Props): JSX.Element {
         }
     }
 
+    function SwatchLegend() {
+        const swatchLegendSvgRef = useRef<SVGSVGElement>(null);
+
+        // Remove any null values from the results array.
+        const resultsWithoutNull = results.filter((item) => item !== null).sort((a, b) => a.date - b.date);
+                
+        // Create a new array to store the unique "language" values and colors
+        const languageColorsArray: Array<{language: string, color: string}> = [];
+        resultsWithoutNull.map((commit) => {
+            if (
+                commit.language != null &&
+                !languageColorsArray.some(
+                  (item) => item.language === commit.language && item.color === commit.color
+                )
+            ) {
+                languageColorsArray.push({language: commit.language, color: commit.color})
+            }
+        });
+
+        // Check if the required data is available.
+        const hasData = results && results.length === commitData.length && results.filter((item) => item !== null).length > 1;
+
+        // Use the useEffect hook to execute code after the component is mounted or updated.
+        useEffect(() => {
+            if(hasData) {
+                // Select the SVG element using D3.js.
+                const svg = d3.select(swatchLegendSvgRef.current);
+
+                // Clear the SVG by removing all existing elements.
+                svg.selectAll('*').remove();
+
+                // Set the base font size.
+                const baseFontSize = 16; // in pixels
+
+                // Set the width and margins of the SVG element.
+                const width = Math.min(windowSize.width, 1200);
+                const swatchHeight = 15;
+                const swatchWidth = 15;
+                let margin: {top: number, right: number, bottom: number, left: number};
+                if (windowSize.width < 1200) {
+                    margin = {top: 0, right: 10, bottom: 10, left: 10};
+                } else {
+                    margin = {top: 0, right: 0, bottom: 10, left: 0};
+                }
+                
+                // Append a new group element with a rect and text for each language.
+                for (let i = 0; i < languageColorsArray.length; i++) {
+                    // Calculate the position of each element in a row of 4.
+                    let rowPosition: number;
+                    if (windowSize.width < 300) {
+                        rowPosition = i % 2;
+                    }
+                    else if (windowSize.width < 900) {
+                        rowPosition = i % 4;
+                    } else {
+                        rowPosition = i % 6;
+                    }
+
+                    // Based on the rowPosition calculate the x and y coordinates.
+                    let swatchX: number;
+                    let swatchY: number;
+                    if (windowSize.width < 300) {
+                        swatchX = (width - margin.left - margin.right) / 2 * rowPosition + margin.left;
+                        swatchY = Math.floor(i / 2) * (swatchHeight + 1) + margin.top;
+                    }
+                    else if (windowSize.width < 900) {
+                        swatchX = (width - margin.left - margin.right) / 4 * rowPosition + margin.left;
+                        swatchY = Math.floor(i / 4) * (swatchHeight + 1) + margin.top;
+                    } else {
+                        swatchX = (width - margin.left - margin.right) / 6 * rowPosition + margin.left;
+                        swatchY = Math.floor(i / 6) * (swatchHeight + 1) + margin.top;
+                    }
+                    let textX = swatchX + swatchWidth + 5;
+                    let textY = swatchY + swatchHeight - 3;
+
+                    // Append the group element to the SVG element.
+                    let g = svg.append("g");
+                    // languageColorsArray[i].color
+                    // Append a swatch to the group element.
+                    g.append("rect")
+                        .attr("width", swatchWidth)
+                        .attr("height", swatchHeight)
+                        .attr("fill", (d: any) => {
+                            const color = d3.rgb(languageColorsArray[i].color).toString();
+                            const rgbaColor = color.replace(')', ', 0.8)')
+                            return rgbaColor;
+                        })
+                        .attr("x", swatchX)
+                        .attr("y", swatchY);
+
+                    // Append a text label to the group element.
+                    g.append("text")
+                        .attr("x", textX)
+                        .attr("y", textY)
+                        .text(languageColorsArray[i].language)
+                        .style("font-size", `${12 / baseFontSize}rem`)
+                        .style("font-family", "Arial");
+                }
+            }
+        }, [results, areaChartSvgRef, windowSize]);
+
+        // Return the SVG element with the specified dimensions.
+        if (hasData) {
+            const numLanguages = languageColorsArray.length;
+            let numRows: number;
+            if (windowSize.width < 300) {
+                numRows = Math.ceil(numLanguages / 2);
+            }
+            else if (windowSize.width < 900) {
+                numRows = Math.ceil(numLanguages / 4);
+            } else {
+                numRows = Math.ceil(numLanguages / 6);
+            }
+            const legendHeight = numRows * (15 + 1) + 10;
+
+            return <svg ref={swatchLegendSvgRef} width={Math.min(windowSize.width, 1200)} height={legendHeight} />;
+        }
+        else return <p>There is not enough data available to visualize the chart. Please try again later.</p>
+    }
+
     // Define a function that creates a cumulative stacked area chart using D3.js.
     function CumulativeStackedAreaChart(): JSX.Element {
         // Check if the required data is available.
@@ -198,9 +318,9 @@ export default function Languages(props: Props): JSX.Element {
                 const width = Math.min(windowSize.width, 1200);
                 let margin: {top: number, right: number, bottom: number, left: number};
                 if (windowSize.width < 1200) {
-                    margin = {top: 20, right: 10, bottom: 42, left: (longestYAxisValue || 10) + 19};
+                    margin = {top: 6, right: 10, bottom: 32, left: (longestYAxisValue || 10) + 19};
                 } else {
-                    margin = {top: 20, right: 0, bottom: 42, left: (longestYAxisValue || 10) + 9};
+                    margin = {top: 6, right: 0, bottom: 32, left: (longestYAxisValue || 10) + 9};
                 }
 
                 // Determine the earliest and latest dates in the results array.
@@ -435,11 +555,7 @@ export default function Languages(props: Props): JSX.Element {
                 />
             </div>
             <div>
-                {legendData.map((entry: {language: string, color: string, date: Date}) => (
-                    <span key={entry.language}>
-                        <span style={{color: entry.color}}>●</span> {entry.language}
-                    </span>
-                ))}
+                {SwatchLegend()}
             </div>
             <>
                 {currentChart == "CumulativeStackedAreaChart" ? CumulativeStackedAreaChart() : PieChart()}
