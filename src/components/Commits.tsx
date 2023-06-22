@@ -150,7 +150,7 @@ export default function Commits(props: Props): JSX.Element {
                 // Define the margins of the chart.
                 let margin: {top: number, right: number, bottom: number, left: number};
                 if (windowSize.width < 1200) {
-                    margin = ({top: 0, right: 10, bottom: 42, left: (longestRepoWidth || 200) + 19});
+                    margin = ({top: 0, right: 10, bottom: 36, left: (longestRepoWidth || 200) + 19});
                 } else {
                     margin = ({top: 0, right: 0, bottom: 12, left: (longestRepoWidth || 200) + 9});
                 }
@@ -241,7 +241,7 @@ export default function Commits(props: Props): JSX.Element {
         if (hasData) {
             const repoSet: Set<string> = new Set();
             results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)});
-            if (windowSize.width < 1200) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 72} />;
+            if (windowSize.width < 1200) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 42} />;
             else return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 32} />;
         }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>;

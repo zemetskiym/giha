@@ -324,9 +324,9 @@ export default function Languages(props: Props): JSX.Element {
                 const width = Math.min(windowSize.width, 1200);
                 let margin: {top: number, right: number, bottom: number, left: number};
                 if (windowSize.width < 1200) {
-                    margin = {top: 6, right: 10, bottom: 32, left: (longestYAxisValue || 10) + 19};
+                    margin = {top: 6, right: 10, bottom: 36, left: (longestYAxisValue || 10) + 19};
                 } else {
-                    margin = {top: 6, right: 0, bottom: 32, left: (longestYAxisValue || 10) + 9};
+                    margin = {top: 6, right: 0, bottom: 28, left: (longestYAxisValue || 10) + 9};
                 }
 
                 // Determine the earliest and latest dates in the results array.
