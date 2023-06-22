@@ -165,8 +165,8 @@ export default function Commits(props: Props): JSX.Element {
             const weekData = Object.entries(findMostProductiveDayOfWeek(filteredCommitData, ReturnType.Count)).map(([key, value]) => ({ key: key.slice(0, 3), value }));
 
             // Define the dimensions of the chart and its margins.
-            const height = Math.min(windowSize.width / 2 * 0.9, 595);
-            const width = Math.min(windowSize.width / 2 * 0.9, 595);
+            const height = Math.min(windowSize.width * 0.9, 595);
+            const width = Math.min(windowSize.width * 0.9, 595);
             const margin = {top: 20, right: 20, bottom: 42, left: 20};
 
             // Define the halo color and width.
@@ -255,7 +255,7 @@ export default function Commits(props: Props): JSX.Element {
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={timeOfWeekSvgRef} width={Math.min(windowSize.width / 2 * 0.9, 595)} height={Math.min(windowSize.width / 2 * 0.9, 595)} />;
+        return <svg ref={timeOfWeekSvgRef} width={Math.min(windowSize.width * 0.9, 595)} height={Math.min(windowSize.width * 0.9, 595)} />;
     }
 
     function findRange(filteredCommitData: Array<Commit>) {
@@ -305,8 +305,8 @@ export default function Commits(props: Props): JSX.Element {
             const LOCData = findRange(filteredCommitData);
 
             // Define the dimensions of the chart and its margins.
-            const height = Math.min(windowSize.width / 2 * 0.9, 595);
-            const width = Math.min(windowSize.width / 2 * 0.9, 595);
+            const height = Math.min(windowSize.width * 0.9, 595);
+            const width = Math.min(windowSize.width * 0.9, 595);
             const margin = {top: 20, right: 20, bottom: 42, left: 20};
 
             // Define the halo color and width.
@@ -395,7 +395,7 @@ export default function Commits(props: Props): JSX.Element {
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={LOCSvgRef} width={Math.min(windowSize.width / 2 * 0.9, 595)} height={Math.min(windowSize.width / 2 * 0.9, 595)} />
+        return <svg ref={LOCSvgRef} width={Math.min(windowSize.width* 0.9, 595)} height={Math.min(windowSize.width * 0.9, 595)} />
     }
 
     function handleDownload(svgRef: React.RefObject<SVGSVGElement>) {
@@ -436,7 +436,7 @@ export default function Commits(props: Props): JSX.Element {
             <div className={styles.facts}>I commit my code in {findMostProductiveTimeOfDay(filteredCommitData)}s</div>
             <div id={styles.graphs}>
                 <span className={styles.graph}>
-                    <div>
+                    <div className={styles.downloadContainer}>
                         <Image className={styles.download} src="/icons/download.svg" onClick={() => handleDownload(timeOfWeekSvgRef)} height={20} width={20} alt="Download" />
                     </div>
                     <div>
@@ -444,7 +444,7 @@ export default function Commits(props: Props): JSX.Element {
                     </div>
                 </span>
                 <span className={styles.graph}>
-                    <div>
+                    <div className={styles.downloadContainer}>
                         <Image className={styles.download} src="/icons/download.svg" onClick={() => handleDownload(LOCSvgRef)} height={20} width={20} alt="Download" />
                     </div>
                     <div>
