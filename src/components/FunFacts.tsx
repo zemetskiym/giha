@@ -38,7 +38,7 @@ export default function Commits(props: Props): JSX.Element {
     const LOCSvgRef = useRef<SVGSVGElement>(null);
 
     // Check if the required commit data is available.
-    const hasData = commitData.length > 0;
+    const hasData = filteredCommitData.length > 0;
 
     type Convention = 'camelCase' | 'snakeCase' | 'pascalCase' | 'kebabCase';
 
@@ -151,9 +151,6 @@ export default function Commits(props: Props): JSX.Element {
 
     // D3.js line graph for the number of commits over the time of week
     function TimeOfWeekLineGraph(): JSX.Element {
-        // Check if the required data is available.
-        const hasData = filteredCommitData.length > 0;
-
         useEffect(() => {
             // Select the SVG element using D3.js.
             const svg = d3.select(timeOfWeekSvgRef.current);
@@ -292,9 +289,6 @@ export default function Commits(props: Props): JSX.Element {
     }
 
     function LOCBarChart(): JSX.Element {
-        // Check if the required data is available.
-        const hasData = filteredCommitData.length > 0;
-
         useEffect(() => {
             // Select the SVG element using D3.js.
             const svg = d3.select(LOCSvgRef.current);
