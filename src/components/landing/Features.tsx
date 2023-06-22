@@ -59,7 +59,7 @@ export default function Features (): JSX.Element {
             </section>
             <section id={styles.exploreSection}>
                 <button id={styles.exploreButton}>
-                    <Link id={styles.exploreLink} target="_blank" href="https://github.com/zemetskiym/commits-analyzer">Explore the code</Link>
+                    <Link id={styles.exploreLink} target="_blank" href="https://github.com/zemetskiym/oauthenticity">Explore the code</Link>
                 </button>
             </section>
         </>

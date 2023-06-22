@@ -6,8 +6,8 @@ export default function Languages(): JSX.Element {
         <footer id={styles.footer}>
             <hr id={styles.hr} />
             <div id={styles.links}>
-                <Link className={styles.link} target="_blank" href="https://github.com/zemetskiym/commits-analyzer/blob/main/LICENSE">License</Link>
-                <Link className={styles.link} target="_blank" href="https://github.com/zemetskiym/commits-analyzer">GitHub Repository</Link>
+                <Link className={styles.link} target="_blank" href="https://github.com/zemetskiym/oauthenticity/blob/main/LICENSE">License</Link>
+                <Link className={styles.link} target="_blank" href="https://github.com/zemetskiym/oauthenticity">GitHub Repository</Link>
             </div>
             <div id={styles.copyright}>© {new Date().getFullYear()} Matthew Zemetskiy. Licensed under the MIT License.</div>
         </footer>
