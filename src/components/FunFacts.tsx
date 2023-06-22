@@ -165,12 +165,12 @@ export default function Commits(props: Props): JSX.Element {
             const weekData = Object.entries(findMostProductiveDayOfWeek(filteredCommitData, ReturnType.Count)).map(([key, value]) => ({ key: key.slice(0, 3), value }));
 
             // Define the dimensions of the chart and its margins.
-            const height = Math.min(windowSize.width / 2, 600);
-            const width = Math.min(windowSize.width / 2, 600);
+            const height = Math.min(windowSize.width / 2, 595);
+            const width = Math.min(windowSize.width / 2, 595);
             const margin = {top: 20, right: 20, bottom: 42, left: 20};
 
             // Define the halo color and width.
-            const halo = "#fff";
+            const halo = "#f5f5f5";
             const haloWidth = 6;
 
             // Define the x-axis scale.
@@ -195,7 +195,7 @@ export default function Commits(props: Props): JSX.Element {
 
             svg.append("path")
                 .attr("d", line(weekData))
-                .attr("stroke", "steelblue")
+                .attr("stroke", "#1565c0")
                 .attr("stroke-width", 2)
                 .attr("fill", "none");
 
@@ -227,7 +227,7 @@ export default function Commits(props: Props): JSX.Element {
                 .join("text")
                 .attr("dy", "0.35em")
                 .attr("x", (d) => xScale(d.key)! + xScale.bandwidth() / 2)
-                .attr("y", (d) => yScale(d.value) - 5) // Adjust the y-coordinate for label placement
+                .attr("y", (d) => yScale(d.value) - 10) // Adjust the y-coordinate for label placement
                 .text((d) => d.value)
                 .call(text => text
                     .filter((_, j, I) => j === I.length - 1)
@@ -255,7 +255,7 @@ export default function Commits(props: Props): JSX.Element {
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={timeOfWeekSvgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />;
+        return <svg ref={timeOfWeekSvgRef} width={Math.min(windowSize.width / 2, 595)} height={Math.min(windowSize.width / 2, 595)} />;
     }
 
     function findRange(filteredCommitData: Array<Commit>) {
@@ -305,12 +305,12 @@ export default function Commits(props: Props): JSX.Element {
             const LOCData = findRange(filteredCommitData);
 
             // Define the dimensions of the chart and its margins.
-            const height = Math.min(windowSize.width / 2, 600);
-            const width = Math.min(windowSize.width / 2, 600);
+            const height = Math.min(windowSize.width / 2, 595);
+            const width = Math.min(windowSize.width / 2, 595);
             const margin = {top: 20, right: 20, bottom: 42, left: 20};
 
             // Define the halo color and width.
-            const halo = "#fff";
+            const halo = "#f5f5f5";
             const haloWidth = 6;
 
             // Define the x-axis scale.
@@ -330,7 +330,7 @@ export default function Commits(props: Props): JSX.Element {
 
             // Add a rect for each bar.
             svg.append("g")
-                .attr("fill", "steelblue")
+                .attr("fill", "#1565c0")
                 .selectAll()
                 .data(LOCData)
                 .join("rect")
@@ -395,7 +395,7 @@ export default function Commits(props: Props): JSX.Element {
         if (!hasData) {
             return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         }
-        return <svg ref={LOCSvgRef} width={Math.min(windowSize.width / 2, 600)} height={Math.min(windowSize.width / 2, 600)} />
+        return <svg ref={LOCSvgRef} width={Math.min(windowSize.width / 2, 595)} height={Math.min(windowSize.width / 2, 595)} />
     }
 
     function handleDownload(svgRef: React.RefObject<SVGSVGElement>) {
@@ -426,28 +426,32 @@ export default function Commits(props: Props): JSX.Element {
     }
 
     return (
-        <section style={hasData ? {display: "block"} : {display: "none"}}>
-            <h1>Fun Facts</h1>
-            <div>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
-            <div>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
-            <div>My most productive days are {findMostProductiveDayOfWeek(filteredCommitData) as string}s</div>
-            <div>I commit my code in {findMostProductiveTimeOfDay(filteredCommitData)}s</div>
-            <span>
-                <div>
-                    <Image src="/icons/download.svg" onClick={() => handleDownload(timeOfWeekSvgRef)} height={20} width={20} alt="Download" />
-                </div>
-                <div>
-                    {TimeOfWeekLineGraph()}
-                </div>
-            </span>
-            <span>
-                <div>
-                    <Image src="/icons/download.svg" onClick={() => handleDownload(LOCSvgRef)} height={20} width={20} alt="Download" />
-                </div>
-                <div>
-                    {LOCBarChart()}
-                </div>
-            </span>
+        <section id={styles.funFacts} style={hasData ? {display: "flex"} : {display: "none"}}>
+            <div id={styles.intro}>
+                <h1 id={styles.title}>Fun Facts</h1>
+            </div>
+            <div className={styles.facts}>I average {findAvgLOC(filteredCommitData).toFixed(2)} lines of code (LOC) per commit</div>
+            <div className={styles.facts}>I consistently follow the <code>{countProgrammingConventions(filteredCommitData)}</code> programming convention</div>
+            <div className={styles.facts}>My most productive days are {findMostProductiveDayOfWeek(filteredCommitData) as string}s</div>
+            <div className={styles.facts}>I commit my code in {findMostProductiveTimeOfDay(filteredCommitData)}s</div>
+            <div id={styles.graphs}>
+                <span className={styles.graph}>
+                    <div>
+                        <Image className={styles.download} src="/icons/download.svg" onClick={() => handleDownload(timeOfWeekSvgRef)} height={20} width={20} alt="Download" />
+                    </div>
+                    <div>
+                        {TimeOfWeekLineGraph()}
+                    </div>
+                </span>
+                <span className={styles.graph}>
+                    <div>
+                        <Image className={styles.download} src="/icons/download.svg" onClick={() => handleDownload(LOCSvgRef)} height={20} width={20} alt="Download" />
+                    </div>
+                    <div>
+                        {LOCBarChart()}
+                    </div>
+                </span>
+            </div>
         </section>
     );
 };
