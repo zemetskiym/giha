@@ -31,14 +31,16 @@ export default function Hero (props: Props): JSX.Element {
     // Set state for the authentication popup.
     const [showPopup, setShowPopup] = useState(false);
 
-    // Retrieving the user's NextAuth.js session data
+    // Retrieving the user's NextAuth.js session data.
     const { data: session } = useSession();
     const accessToken = session?.accessToken;
 
     // Defining a function to handle form submissions.
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        setSearch((prev) => ({user: prev.user, submit: true}))
+        if (search.user.length > 0) {
+            setSearch((prev) => ({user: prev.user, submit: true}))
+        }
     }
 
     // Create a function to render a d3.js globe.
