@@ -241,8 +241,8 @@ export default function Commits(props: Props): JSX.Element {
         if (hasData) {
             const repoSet: Set<string> = new Set();
             results.filter((item) => item !== null).sort((a, b) => a.date - b.date).map((commit) => {repoSet.add(commit.repo)});
-            if (windowSize.width < 1200) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 42} />;
-            else return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 24.2 + 32} />;
+            if (windowSize.width < 1200) return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 36} />;
+            else return <svg ref={svgRef} width={Math.min(windowSize.width, 1200)} height={repoSet.size * 30 + 12 + 9} />;
         }
         if (!hasData) return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
         return <p>There is not enough data available to visualize the chart. Please try again later.</p>;
