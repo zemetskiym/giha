@@ -2,11 +2,29 @@ import styles from "../styles/components/Navbar.module.css";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useWindowSizeContext } from '@/components/context';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Navbar (): JSX.Element {
     // Define state for the mobile menu
     const [mobileMenu, setMobileMenu] = useState(false);
+    const mobileMenuRef = useRef<HTMLUListElement>(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+          if (
+            mobileMenuRef.current &&
+            !mobileMenuRef.current.contains(event.target as Node)
+          ) {
+            setMobileMenu(false);
+          }
+        };
+    
+        document.addEventListener('mousedown', handleOutsideClick);
+    
+        return () => {
+          document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
 
     // Retrieving the user's NextAuth.js session data
     const { data: session } = useSession()
@@ -53,7 +71,7 @@ export default function Navbar (): JSX.Element {
                     </li>
                 </ul>
                 {mobileMenu && 
-                <ul id={styles.dropdownMenu}>
+                <ul id={styles.dropdownMenu} ref={mobileMenuRef}>
                     <hr className={styles.hr} />
                     {/* Rendering the sign in button if the user is not signed in */}
                     {!session && <li onClick={() => signIn()} className={styles.navLink}>
