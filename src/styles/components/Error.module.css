@@ -1,0 +1,21 @@
+#error {
+    display: flex;
+    align-items: center;
+    background-color: #000000;
+    width: 100vw;
+    position: fixed;
+    top: 50px;
+    padding: 3px 6px;
+    border: 1px #FF6161;
+    border-style: solid none solid none;
+    z-index: 101;
+}
+
+#errorIcon {
+    filter: invert(76%) sepia(48%) saturate(6761%) hue-rotate(320deg) brightness(98%) contrast(112%);
+}
+
+#errorText {
+    color: #FF6161;
+    margin-left: 6px;
+}

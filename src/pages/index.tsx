@@ -6,6 +6,7 @@ import Profile from "../components/Profile";
 import Languages from '@/components/Languages';
 import Commits from '@/components/Commits';
 import FunFacts from '@/components/FunFacts';
+import Error from "@/components/Error";
 import { useWindowSizeContext } from '@/components/context';
 import { useSession } from "next-auth/react";
 
@@ -181,7 +182,7 @@ export default function Index() {
         setError("Please enter a valid username.")
       }
       else if (eventResponse.status == 403) {
-        setError("Please wait for the API rate limit to reset.")
+        setError("Please wait for the API rate limit to reset or sign in with Github.")
       }
       else {
         setError(`Unknown error code: ${eventResponse.status}.`)
@@ -195,7 +196,7 @@ export default function Index() {
     if (error != null) {
       const timer = setTimeout(() => {
         setError(null);
-      }, 5000); 
+      }, 7000); 
       return () => clearTimeout(timer);
     }
   }, [error]);
@@ -231,7 +232,7 @@ export default function Index() {
 
       {eventData != null && commitData.length == eventData.length && <FunFacts commitData={commitData} />}
 
-      {error != null && <p>{error}</p>}
+      {error != null && <Error error={error} />}
     </>
   )
 }
