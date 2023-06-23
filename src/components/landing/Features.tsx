@@ -7,7 +7,7 @@ export default function Features (): JSX.Element {
         <>
             <section>
                 <div className={styles.feature}>
-                    <Image className={styles.featureImage} src="/landing/commit-languages-area-chart.svg" height={150} width={300} alt="" />
+                    <Image priority={true} className={styles.featureImage} src="/landing/commit-languages-area-chart.svg" height={150} width={300} alt="" />
                     <span className={styles.featureText}>
                         <h3 className={styles.featureTextTitle}>Visualize the evolution of your programming skills</h3>
                         <p className={styles.featureTextParagraph}>Uncover the journey of your programming skills with our cumulative stacked area chart. This powerful visualization displays the growth and changes in your preferred programming languages over time, allowing you to track your progress, adapt to emerging technologies, and showcase your expertise.</p>
