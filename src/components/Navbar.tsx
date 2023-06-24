@@ -3,6 +3,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useWindowSizeContext } from '@/components/context';
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 export default function Navbar (): JSX.Element {
     // Define state for the mobile menu
@@ -39,28 +40,33 @@ export default function Navbar (): JSX.Element {
 
     return (
         <nav id={styles.navbar}>
-            {windowSize.width >= 500 && 
+            {windowSize.width >= 550 && 
                 <ul id={styles.navbarList}>
                     <li id={styles.title}>OAuthenticity</li>
+                    <li className={styles.leftNavLink}>
+                        <Link id={styles.home} href="/">Home</Link>
+                    </li>
 
                     {/* Rendering the sign in button if the user is not signed in */}
-                    {!session && <li onClick={() => signIn()} className={styles.navLink}>
-                        <Image id={styles.personIcon} className={styles.icon} src="/icons/person.svg" alt="" width={14} height={14} />
-                        <span className={styles.marginRight}>Sign in</span>
+                    {!session && <li onClick={() => signIn()} className={styles.leftNavLink}>
+                        Sign in
                     </li>}
                     {/* Rendering the sign out button if the user is signed in */}
-                    {session && <li onClick={() => signOut()} className={styles.navLink}>
-                        <Image id={styles.personIcon} className={styles.icon} src="/icons/person.svg" alt="" width={14} height={14} />
-                        <span className={styles.marginRight}>Sign out</span>
+                    {session && <li onClick={() => signOut()} className={styles.leftNavLink}>
+                        Sign out
                     </li>}
                     
-                    <li onClick={() => pageReload()} className={styles.navLink}>
-                        <Image id={styles.plusIcon} className={styles.icon} src="/icons/plus.svg" alt="" width={14} height={14} />
-                        <span>New Report</span>
+                    <li onClick={() => pageReload()} className={styles.leftNavLink}>
+                        New Report
+                    </li>
+                    <li className={styles.leftNavLink} id={styles.github}>
+                        <Link target="_blank" href="https://github.com/zemetskiym/oauthenticity">
+                            <Image src="/icons/Github.svg" className={styles.icon} alt="Github" width={24} height={24} />
+                        </Link>
                     </li>
                 </ul>
             }
-            {windowSize.width < 500 && 
+            {windowSize.width < 550 && 
                 <>
                 <ul id={styles.evenNavbarList}>
                     <li onClick={() => setMobileMenu(prev => !prev)} className={styles.navLink}>
@@ -75,18 +81,15 @@ export default function Navbar (): JSX.Element {
                     <hr className={styles.hr} />
                     {/* Rendering the sign in button if the user is not signed in */}
                     {!session && <li onClick={() => signIn()} className={styles.navLink}>
-                        <Image id={styles.personIcon} className={styles.icon} src="/icons/person.svg" alt="" width={14} height={14} />
-                        <span className={styles.marginRight}>Sign in</span>
+                        Sign in
                     </li>}
                     {/* Rendering the sign out button if the user is signed in */}
                     {session && <li onClick={() => signOut()} className={styles.navLink}>
-                        <Image id={styles.personIcon} className={styles.icon} src="/icons/person.svg" alt="" width={14} height={14} />
-                        <span className={styles.marginRight}>Sign out</span>
+                        Sign out
                     </li>}
                     <hr className={styles.hr} />
                     <li onClick={() => pageReload()} className={styles.navLink}>
-                        <Image id={styles.plusIcon} className={styles.icon} src="/icons/plus.svg" alt="" width={14} height={14} />
-                        <span>New Report</span>
+                        New Report
                     </li>
                 </ul>
                 }
