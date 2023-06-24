@@ -436,6 +436,7 @@ export default function Commits(props: Props): JSX.Element {
                     <div>
                         {TimeOfWeekLineGraph()}
                     </div>
+                    <div className={styles.label}>Time of Week (TOW)</div>
                 </span>
                 <span className={styles.graph}>
                     <div className={styles.downloadContainer}>
@@ -444,6 +445,7 @@ export default function Commits(props: Props): JSX.Element {
                     <div>
                         {LOCBarChart()}
                     </div>
+                    <div className={styles.label}>Lines of Code (LOC)</div>
                 </span>
             </div>
         </section>
