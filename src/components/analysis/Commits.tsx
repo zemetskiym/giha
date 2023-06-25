@@ -1,4 +1,4 @@
-import styles from "../styles/components/Commits.module.css"
+import styles from "@/styles/components/Commits.module.css"
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 import { useWindowSizeContext } from '@/components/context';

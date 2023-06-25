@@ -2,7 +2,7 @@
 import styles from "@/styles/components/Languages.module.css"
 import { useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js'
-import { languageColors } from "../../public/languageColors";
+import { languageColors } from "../../../public/languageColors";
 import * as d3 from "d3";
 import { useWindowSizeContext } from '@/components/context';
 import Image from "next/image";

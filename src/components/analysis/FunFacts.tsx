@@ -1,4 +1,4 @@
-import styles from "../styles/components/FunFacts.module.css";
+import styles from "@/styles/components/FunFacts.module.css";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useWindowSizeContext } from '@/components/context';
