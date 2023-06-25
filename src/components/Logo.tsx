@@ -22,6 +22,23 @@ export default function Logo(props: Props): JSX.Element {
         // Clear the SVG by removing all existing elements.
         svg.selectAll('*').remove();
 
+        // Define the line coordinates.
+        const lineData = [
+            [0, height],   // Bottom left point
+            [width, 0]     // Top right point
+        ];
+  
+        // Create a line generator.
+        const line = d3.line<[number, number]>()
+            .x(d => d[0])
+            .y(d => d[1]);
+
+        svg.append('path')
+            .attr('d', line(lineData as [number, number][]))
+            .attr('stroke', '#000000')
+            .attr('stroke-width', height / 3)
+            .attr('fill', 'none');
+
         // Define the radius of the circle.
         const radius = Math.min(width, height) / 2;
         const innerRadius = radius * 0.6;
@@ -79,19 +96,8 @@ export default function Logo(props: Props): JSX.Element {
                 innerRadius: 0,
                 outerRadius: radius - 1
             }))
-            .attr("fill", "#f0f0f0");
+            .attr("fill", "#ffffff");
 
-        // Define the line coordinates.
-        const lineData = [
-            [0, height],   // Bottom left point
-            [width, 0]     // Top right point
-        ];
-  
-        // Create a line generator.
-        const line = d3.line<[number, number]>()
-            .x(d => d[0])
-            .y(d => d[1]);
-  
         // Append a <path> element representing the line.
         svg.append('path')
             .attr('d', line(lineData as [number, number][]))
@@ -99,7 +105,7 @@ export default function Logo(props: Props): JSX.Element {
             .attr('stroke-width', height / 3)
             .attr('fill', 'none')
             .style('mix-blend-mode', 'difference');
-            
+
     }, [height, width]);
 
     return <svg ref={svgRef} width={width} height={height} />;
