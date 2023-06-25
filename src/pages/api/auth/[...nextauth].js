@@ -22,6 +22,9 @@ export const authOptions = {
           session.accessToken = token.accessToken
           return session
         }
+    },
+    pages: {
+      signIn: '/auth/signin',
     }
 }
 

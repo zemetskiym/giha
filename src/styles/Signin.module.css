@@ -1,0 +1,130 @@
+#signIn {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+#cardHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+#title {
+    display: inline;
+    font-size: 2.4rem;
+    font-weight: 400;
+    margin-left: 20px;
+    color: #212121;
+}
+
+.wrapper {
+    display: flex;
+    align-items: center;
+    transform: rotate(11deg) translate(-20%, -10%);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 70%;
+    height: 150%;
+    background-color: #f0f0f0;
+    z-index: 2;
+}
+  
+.content {
+    position: relative;
+    display: flex;
+    padding: 30px;
+    width: 100%;
+    height: calc(100vh - 64px);
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    z-index: 2;
+}
+  
+.cardWrapper {
+    display: flex;
+    width: 400px;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    margin-left: 15%;
+    font-size: 1.2rem;
+    z-index: 3;
+}
+
+#cardLogo {
+    filter: invert(27%) sepia(97%) saturate(1351%) hue-rotate(195deg) brightness(91%) contrast(92%);
+}
+  
+.cardContent {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px;
+    border: 1px #e0e0e0 solid;
+}
+  
+.cardContent hr {
+    margin: 16px 0;
+}
+  
+.cardContent button {
+    line-height: 1.5715;
+    position: relative;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    touch-action: manipulation;
+    height: 42px;
+    padding: 4px 15px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    color: #ffffff;
+    background: #104d93;
+    border-color: #d9d9d9;
+    width: 100%;
+}
+  
+.styledPattern {
+    position: absolute;
+    object-fit: cover;
+    min-width: 100%;
+    min-height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background-color: #f0f0f0;
+}
+  
+@media (max-width: 1024px) {
+    .wrapper {
+      left: -50px; 
+      width: 80%;
+    }
+}
+  
+@media (max-width: 768px) {
+    .wrapper {
+      width: 200%;
+    }
+    .styledPattern {
+      display: none !important;
+    }
+    .content {
+      justify-content: center;
+    }
+    .cardWrapper {
+      margin-left: 0px;
+    }
+}
