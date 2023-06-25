@@ -3,6 +3,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useWindowSizeContext } from '@/components/context';
 import { useEffect, useRef, useState } from "react";
+import Logo from "@/components/Logo";
 import Link from "next/link";
 
 export default function Navbar (): JSX.Element {
@@ -40,9 +41,12 @@ export default function Navbar (): JSX.Element {
 
     return (
         <nav id={styles.navbar}>
-            {windowSize.width >= 550 && 
+            {windowSize.width >= 600 && 
                 <ul id={styles.navbarList}>
-                    <li id={styles.title}>OAuthenticity</li>
+                    <li onClick={() => pageReload()} className={styles.navLink}>
+                        <Logo height={40} width={40} />
+                    </li>
+                    <li onClick={() => pageReload()} className={styles.navLink} id={styles.title}>OAuthenticity</li>
                     <li className={styles.leftNavLink}>
                         <Link id={styles.home} href="/">Home</Link>
                     </li>
@@ -66,11 +70,14 @@ export default function Navbar (): JSX.Element {
                     </li>
                 </ul>
             }
-            {windowSize.width < 550 && 
+            {windowSize.width < 600 && 
                 <>
                 <ul id={styles.evenNavbarList}>
                     <li onClick={() => setMobileMenu(prev => !prev)} className={styles.navLink}>
                         <Image className={styles.icon} src="/icons/hamburger-menu.svg" alt="Menu" width={24} height={24} />
+                    </li>
+                    <li onClick={() => pageReload()} className={styles.navLink}>
+                        <Logo height={40} width={40} />
                     </li>
                     <li onClick={() => pageReload()} className={styles.navLink}>
                         <Image className={styles.icon} src="/icons/plus.svg" alt="" width={24} height={24} />
