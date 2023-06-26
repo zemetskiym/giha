@@ -1,0 +1,23 @@
+#loading {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0;
+    border: 1px #c5c5c5;
+    border-style: solid none none none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0 5px 30px;
+    z-index: 98;
+}
+
+#close {
+    cursor: pointer;
+    height: 100%;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}

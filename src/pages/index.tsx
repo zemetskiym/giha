@@ -7,6 +7,7 @@ import Languages from '@/components/analysis/Languages';
 import Commits from '@/components/analysis/Commits';
 import FunFacts from '@/components/analysis/FunFacts';
 import Error from "@/components/Error";
+import Loading from '@/components/analysis/Loading';
 import { useWindowSizeContext } from '@/components/context';
 import { useSession } from "next-auth/react";
 
@@ -223,6 +224,8 @@ export default function Index() {
   return (
     <>
       {userData == null && <Home search={search} setSearch={setSearch} numCommits={numCommits} setNumCommits={setNumCommits} />}
+
+      {userData != null && <Loading />}
 
       {userData != null && repoData != null && <Profile userData={userData} repoData={repoData} />}
       
