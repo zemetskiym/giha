@@ -208,7 +208,7 @@ export default function Hero (props: Props): JSX.Element {
                 {showPopup && <AuthenticationPopup />}
                 {!session && 
                     <div id={styles.signInContainer}>
-                        <button id={styles.signIn} type="button" onClick={() => signIn()}>
+                        <button id={styles.signIn} type="button" onClick={() => signIn("github")}>
                             <Image id={styles.githubIcon} src="/icons/github.svg" width={20} height={20} alt="" />
                             <span>Sign in with GitHub</span>
                         </button>

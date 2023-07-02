@@ -52,7 +52,7 @@ export default function Navbar (): JSX.Element {
                     </li>
 
                     {/* Rendering the sign in button if the user is not signed in */}
-                    {!session && <li onClick={() => signIn()} className={styles.leftNavLink}>
+                    {!session && <li onClick={() => signIn("github")} className={styles.leftNavLink}>
                         Sign in
                     </li>}
                     {/* Rendering the sign out button if the user is signed in */}
