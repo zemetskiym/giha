@@ -1,6 +1,6 @@
-# OAuthenticity
+# GIHA (Github Insights and Heuristic Analysis)
 
-OAuthenticity is a web-based tool for analyzing GitHub profiles, providing valuable insights into programming languages, commit distribution, and fun facts about users' coding habits. This README provides an overview of the project, its features, and instructions for installation and usage.
+GIHA is a web-based tool for analyzing GitHub profiles, providing valuable insights into programming languages, commit distribution, and fun facts about users' coding habits. This README provides an overview of the project, its features, and instructions for installation and usage.
 
 ## Table of Contents
 
@@ -16,11 +16,11 @@ OAuthenticity is a web-based tool for analyzing GitHub profiles, providing valua
 
 ## Introduction
 
-OAuthenticity is a play on the terms OAuth and authenticity, emphasizing its focus on providing genuine and insightful information about GitHub users' profiles. The website utilizes Next.js, D3.js, highlight.js, and NextAuth.js to create an interactive and visually appealing interface for data analysis.
+GIHA is an acronym for "GitHub Insights and Heuristic Analysis," emphasizing its focus on providing genuine and insightful information about GitHub users' profiles. The website utilizes Next.js, D3.js, highlight.js, and NextAuth.js to create an interactive and visually appealing interface for data analysis.
 
 ## Features
 
-OAuthenticity offers the following key features:
+GIHA offers the following key features:
 
 - **Stacked Area Chart**: Visualize a user's programming language usage over time.
 - **Pie Chart**: Quickly glance at the overall distribution of programming languages used.
@@ -33,18 +33,18 @@ OAuthenticity offers the following key features:
 
 ## Installation
 
-To install and run OAuthenticity locally, please follow these steps:
+To install and run GIHA locally, please follow these steps:
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/zemetskiym/oauthenticity.git
+   git clone https://github.com/zemetskiym/giha.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd OAuthenticity
+   cd giha
    ```
 
 3. Install dependencies:
@@ -71,7 +71,7 @@ To install and run OAuthenticity locally, please follow these steps:
 
 ## Technologies Used
 
-OAuthenticity is built using the following technologies and frameworks:
+GIHA is built using the following technologies and frameworks:
 
 - Next.js
 - D3.js
@@ -80,17 +80,17 @@ OAuthenticity is built using the following technologies and frameworks:
 
 ## License
 
-OAuthenticity is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+GIHA is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-We welcome contributions to OAuthenticity! If you find any issues or have ideas for improvements, please submit them as [GitHub Issues](https://github.com/zemetskiym/oauthenticity/issues). Pull requests are also appreciated.
+We welcome contributions to GIHA! If you find any issues or have ideas for improvements, please submit them as [GitHub Issues](https://github.com/zemetskiym/giha/issues). Pull requests are also appreciated.
 
 Before contributing, please review our [Contributing Guidelines](CONTRIBUTING.md).
 
 ## Acknowledgements
 
-We would like to acknowledge the following resources and libraries that made OAuthenticity possible:
+We would like to acknowledge the following resources and libraries that made GIHA possible:
 
 - Next.js: [https://nextjs.org](https://nextjs.org)
 - D3.js: [https://d3js.org](https://d3js.org)
@@ -99,4 +99,4 @@ We would like to acknowledge the following resources and libraries that made OAu
 
 ## Contact
 
-For any inquiries or feedback, please contact us at `oauthenticity@proton.me`.
+For any inquiries or feedback, please contact us at `GIHAnalysis@proton.me`.
