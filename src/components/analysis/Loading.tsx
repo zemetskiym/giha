@@ -16,7 +16,7 @@ export default function Loading(): JSX.Element {
         <div id={styles.loading}>
           <span>
             If the content is taking longer than expected to load, please consider opening a{" "} 
-            <Link target="_blank" href="https://github.com/zemetskiym/oauthenticity/issues/new/choose">GitHub issue</Link>
+            <Link target="_blank" href="https://github.com/zemetskiym/giha/issues/new/choose">GitHub issue</Link>
             {" "}for further assistance.
           </span>
           <div id={styles.close} onClick={handleClose}>

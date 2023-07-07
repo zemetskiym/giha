@@ -63,7 +63,7 @@ To install and run GIHA locally, please follow these steps:
 
 ## Usage
 
-1. Visit the OAuthenticity website at `http://localhost:3000` or the deployed URL.
+1. Visit the GIHA website at `http://localhost:3000` or the deployed URL.
 2. Authenticate with your GitHub account using OAuth to increase your rate limit and access private repositories.
 3. Enter the GitHub username you wish to analyze.
 4. Explore the various charts and sections to gain insights into the user's programming languages and commit patterns.

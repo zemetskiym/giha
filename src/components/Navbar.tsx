@@ -46,7 +46,7 @@ export default function Navbar (): JSX.Element {
                     <li onClick={() => pageReload()} className={styles.navLink}>
                         <Logo height={40} width={40} />
                     </li>
-                    <li onClick={() => pageReload()} className={styles.navLink} id={styles.title}>OAuthenticity</li>
+                    <li onClick={() => pageReload()} className={styles.navLink} id={styles.title}>GIHA</li>
                     <li className={styles.leftNavLink}>
                         <Link id={styles.home} href="/">Home</Link>
                     </li>
@@ -64,7 +64,7 @@ export default function Navbar (): JSX.Element {
                         New Report
                     </li>
                     <li className={styles.leftNavLink} id={styles.github}>
-                        <Link target="_blank" href="https://github.com/zemetskiym/oauthenticity">
+                        <Link target="_blank" href="https://github.com/zemetskiym/giha">
                             <Image src="/icons/Github.svg" className={styles.icon} alt="Github" width={24} height={24} />
                         </Link>
                     </li>
