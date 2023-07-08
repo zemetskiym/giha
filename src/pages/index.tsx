@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styles from '@/styles/Index.module.css';
 import { useState, useEffect } from 'react';
 import Home from "../components/landing/Landing";
 import Profile from "../components/analysis/Profile";
@@ -8,7 +7,6 @@ import Commits from '@/components/analysis/Commits';
 import FunFacts from '@/components/analysis/FunFacts';
 import Error from "@/components/Error";
 import Loading from '@/components/analysis/Loading';
-import { useWindowSizeContext } from '@/components/context';
 import { useSession } from "next-auth/react";
 
 // Extend the SessionData interface from 'next-auth' to include the accessToken property
@@ -66,7 +64,6 @@ export default function Index() {
   const [eventData, setEventData] = useState<Array<Partial<Event>> | null>(null);
   const [commitData, setCommitData] = useState<Array<Commit | null>>([]);
   const [error, setError] = useState<string | null>(null);
-  const windowSize = useWindowSizeContext();
 
   // Retrieving the user's NextAuth.js session data
   const { data: session } = useSession();
