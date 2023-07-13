@@ -39,7 +39,6 @@
 
 #subtitle {
     color: #424242;
-    text-align: justify;
 }
 
 #form {
@@ -149,7 +148,6 @@
     }
     #subtitle {
         font-size: 1.4rem;
-        text-align: left;
     }
 }
 
