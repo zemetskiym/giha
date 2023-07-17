@@ -1,0 +1,21 @@
+
+> commits-analyzer@0.1.0 dev
+> next dev
+
+[33mwarn[39m  - Port 3000 is in use, trying 3001 instead.
+[32mready[39m - started server on 0.0.0.0:3001, url: http://localhost:3001
+
+> commits-analyzer@0.1.0 dev
+> next dev
+
+[32mready[39m - started server on 0.0.0.0:3000, url: http://localhost:3000
+[35mevent[39m - compiled client and server successfully in 2.6s (824 modules)
+[36mwait[39m  - compiling / (client and server)...
+[35mevent[39m - compiled client and server successfully in 1512 ms (1067 modules)
+[36mwait[39m  - compiling /_error (client and server)...
+[36mwait[39m  - compiling /api/auth/[...nextauth] (client and server)...
+[35mevent[39m - compiled client and server successfully in 1355 ms (1079 modules)
+[next-auth][warn][NEXTAUTH_URL] 
+https://next-auth.js.org/warnings#nextauth_url
+[next-auth][warn][NO_SECRET] 
+https://next-auth.js.org/warnings#no_secret
