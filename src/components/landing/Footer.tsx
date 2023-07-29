@@ -1,4 +1,4 @@
-import styles from "../styles/components/Footer.module.css";
+import styles from "@/styles/components/landing/Footer.module.css";
 import Link from "next/link";
 
 export default function Languages(): JSX.Element {

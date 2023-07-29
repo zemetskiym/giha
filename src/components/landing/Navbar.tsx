@@ -1,4 +1,4 @@
-import styles from "../styles/components/Navbar.module.css";
+import styles from "@/styles/components/landing/Navbar.module.css";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useWindowSizeContext } from '@/components/context';
@@ -65,7 +65,7 @@ export default function Navbar (): JSX.Element {
                     </li>
                     <li className={styles.leftNavLink} id={styles.github}>
                         <Link target="_blank" href="https://github.com/zemetskiym/giha">
-                            <Image src="/icons/Github.svg" className={styles.icon} alt="Github" width={24} height={24} />
+                            <Image src="/icons/github.svg" className={styles.icon} alt="Github" width={24} height={24} />
                         </Link>
                     </li>
                 </ul>
