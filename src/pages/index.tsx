@@ -7,6 +7,8 @@ import Commits from '@/components/analysis/Commits';
 import FunFacts from '@/components/analysis/FunFacts';
 import Error from "@/components/Error";
 import Loading from '@/components/analysis/Loading';
+import Navbar from '@/components/landing/Navbar.tsx';
+import Footer from '@/components/landing/Footer.tsx';
 import { useSession } from "next-auth/react";
 
 // Extend the SessionData interface from 'next-auth' to include the accessToken property
@@ -220,6 +222,8 @@ export default function Index() {
   // Render either the Home or data analysis components based on whether userData and repoData are null or not
   return (
     <>
+      <Navbar />    
+
       {userData == null && <Home search={search} setSearch={setSearch} numCommits={numCommits} setNumCommits={setNumCommits} />}
 
       {userData != null && <Loading />}
@@ -233,6 +237,8 @@ export default function Index() {
       {eventData != null && commitData.length == eventData.length && <FunFacts commitData={commitData} />}
 
       {error != null && <Error error={error} />}
+
+      <Footer />
     </>
   )
 }
