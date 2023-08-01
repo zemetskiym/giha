@@ -7,8 +7,8 @@ import Commits from '@/components/analysis/Commits';
 import FunFacts from '@/components/analysis/FunFacts';
 import Error from "@/components/Error";
 import Loading from '@/components/analysis/Loading';
-import Navbar from '@/components/landing/Navbar.tsx';
-import Footer from '@/components/landing/Footer.tsx';
+import Navbar from '@/components/landing/Navbar';
+import Footer from '@/components/landing/Footer';
 import { useSession } from "next-auth/react";
 
 // Extend the SessionData interface from 'next-auth' to include the accessToken property

@@ -1,4 +1,4 @@
-import Sidebar from "../components/dashboard/Sidebar.tsx"
+import Sidebar from "../components/dashboard/Sidebar"
 import { useSession, signIn } from "next-auth/react";
 
 export default function Dashboard() {
