@@ -8,6 +8,9 @@ import { useSession } from "next-auth/react";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 
+// Import TypeScript getServerSideProps type for context variable
+import { GetServerSidePropsContext } from "next";
+
 export default function Dashboard() {
     // Retrieving the user's NextAuth.js session data
     const { data: session } = useSession();
@@ -20,7 +23,7 @@ export default function Dashboard() {
 }
 
 // Define a server-side function to fetch the user's session data and handle authentication
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     // Fetch the user's session using the server-side function getServerSession
     const session = await getServerSession(context.req, context.res, authOptions);
 
