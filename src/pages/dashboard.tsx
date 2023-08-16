@@ -1,23 +1,17 @@
-// Import child components used in the parent component
+// Import the necessary modules and components
+import { useState } from 'react';
 import Sidebar from "../components/dashboard/Sidebar";
-
-// Import client-side modules for user sessions and authentication
-import { useSession } from "next-auth/react";
-
-// Import necessary server-side modules for authentication handling
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
-
-// Import TypeScript getServerSideProps type for context variable
 import { GetServerSidePropsContext } from "next";
 
+// Define the Dashboard component
 export default function Dashboard() {
-    // Retrieving the user's NextAuth.js session data
-    const { data: session } = useSession();
+    const [activeView, setActiveView] = useState<string>('dashboard')
 
     return (
         <>
-            <Sidebar />
+            <Sidebar activeView={activeView} setActiveView={setActiveView} />
         </>
     )
 }
