@@ -91,7 +91,7 @@ export default function Sidebar(props: Props): JSX.Element {
                         </li>
                     </ul>
                     }
-                    <div data-testid="profile-menu" id={styles.profileMenu} onClick={() => setProfileMenuPopout(prev => !prev)}>
+                    <div data-testid="profile-menu" id={styles.profileMenu} style={profileMenuPopup ? {backgroundColor: "#292A32"}: {}} onClick={() => setProfileMenuPopout(prev => !prev)}>
                         {session?.user?.image ? 
                             <Image src={session?.user?.image} alt="" height={20} width={20} id={styles.profileIcon} />
                             :
