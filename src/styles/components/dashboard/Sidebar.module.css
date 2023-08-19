@@ -51,6 +51,10 @@
     background-color: #292A32;
 }
 
+#profileIcon {
+    margin-right: 10px;
+}
+
 .optionIcon {
     margin: 0 10px 0 0;
     filter: brightness(0) invert(92%) sepia(9%) saturate(115%) hue-rotate(202deg) brightness(95%) contrast(89%); 
@@ -143,6 +147,11 @@
     .optionContainer {
         height: 2vw;
         padding: 0 0.5vw;
+    }
+    #profileIcon {
+        height: 0.8vw;
+        width: 0.8vw;
+        margin-right: 0.5vw;
     }
     .optionIcon {
         height: 0.8vw;
