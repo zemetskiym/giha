@@ -47,19 +47,21 @@ To install and run GIHA locally, please follow these steps:
    cd giha
    ```
 
-3. Install dependencies:
+3. Ensure you have [Node.js](https://nodejs.org/) installed. If not, download and install it.
+
+4. Install dependencies:
 
    ```bash
    npm install
    ```
 
-4. Start the development server:
+5. Start the development server:
 
    ```bash
    npm run dev
    ```
 
-5. Access the website in your browser at `http://localhost:3000`.
+6. Access the website in your browser at `http://localhost:3000`.
 
 ## Usage
 
