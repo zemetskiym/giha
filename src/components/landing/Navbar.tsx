@@ -3,7 +3,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { useWindowSizeContext } from '@/components/context';
 import { useEffect, useRef, useState } from "react";
-import Logo from "@/components/Logo";
 import Link from "next/link";
 
 export default function Navbar (): JSX.Element {
@@ -43,9 +42,6 @@ export default function Navbar (): JSX.Element {
         <nav id={styles.navbar}>
             {windowSize.width >= 600 && 
                 <ul id={styles.navbarList}>
-                    <li onClick={() => pageReload()} className={styles.navLink}>
-                        <Logo height={40} width={40} />
-                    </li>
                     <li onClick={() => pageReload()} className={styles.navLink} id={styles.title}>GIHA</li>
                     <li className={styles.leftNavLink}>
                         <Link id={styles.home} href="/">Home</Link>
@@ -77,7 +73,7 @@ export default function Navbar (): JSX.Element {
                         <Image className={styles.icon} src="/icons/hamburger-menu.svg" alt="Menu" width={24} height={24} />
                     </li>
                     <li onClick={() => pageReload()} className={styles.navLink}>
-                        <Logo height={40} width={40} />
+                        GIHA
                     </li>
                     <li onClick={() => pageReload()} className={styles.navLink}>
                         <Image className={styles.icon} src="/icons/plus.svg" alt="" width={24} height={24} />
